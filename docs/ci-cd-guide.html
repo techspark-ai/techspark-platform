@@ -11,37 +11,93 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            --light: #f8f9fa;
+            --dark: #2d3748;
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             line-height: 1.6;
             color: #333;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
+            transition: background 0.3s ease;
+        }
+
+        body.dark-mode {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: #e2e8f0;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
         }
 
+        /* Header */
         header {
             background: white;
             padding: 40px 20px;
             border-radius: 10px;
             margin-bottom: 30px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        header h1 {
-            color: #667eea;
+        body.dark-mode header {
+            background: #2d3748;
+            color: #e2e8f0;
+        }
+
+        header .header-content h1 {
+            color: var(--primary);
             font-size: 2.5em;
             margin-bottom: 10px;
+        }
+
+        body.dark-mode header .header-content h1 {
+            color: #60a5fa;
         }
 
         header p {
             color: #666;
             font-size: 1.1em;
+        }
+
+        body.dark-mode header p {
+            color: #cbd5e0;
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .theme-toggle, .toc-toggle {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s;
+        }
+
+        .theme-toggle:hover, .toc-toggle:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
         }
 
         .breadcrumb {
@@ -51,7 +107,7 @@
         }
 
         .breadcrumb a {
-            color: #667eea;
+            color: var(--primary);
             text-decoration: none;
         }
 
@@ -59,13 +115,15 @@
             text-decoration: underline;
         }
 
+        /* Main Layout */
         .content {
             display: grid;
-            grid-template-columns: 250px 1fr;
+            grid-template-columns: 280px 1fr;
             gap: 30px;
             margin-bottom: 30px;
         }
 
+        /* Sidebar */
         .sidebar {
             background: white;
             padding: 20px;
@@ -74,12 +132,22 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             position: sticky;
             top: 20px;
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
+        }
+
+        body.dark-mode .sidebar {
+            background: #2d3748;
         }
 
         .sidebar h3 {
-            color: #667eea;
+            color: var(--primary);
             margin-bottom: 15px;
             font-size: 1.1em;
+        }
+
+        body.dark-mode .sidebar h3 {
+            color: #60a5fa;
         }
 
         .sidebar ul {
@@ -99,12 +167,22 @@
             transition: all 0.3s ease;
         }
 
+        body.dark-mode .sidebar a {
+            color: #cbd5e0;
+        }
+
         .sidebar a:hover {
             background: #f0f0f0;
-            color: #667eea;
+            color: var(--primary);
             padding-left: 16px;
         }
 
+        body.dark-mode .sidebar a:hover {
+            background: #4a5568;
+            color: #60a5fa;
+        }
+
+        /* Main Content */
         .main-content {
             background: white;
             padding: 40px;
@@ -112,23 +190,36 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
 
+        body.dark-mode .main-content {
+            background: #2d3748;
+        }
+
         .section {
             margin-bottom: 40px;
         }
 
         .section h2 {
-            color: #667eea;
+            color: var(--primary);
             font-size: 2em;
             margin-bottom: 20px;
             padding-bottom: 10px;
-            border-bottom: 3px solid #667eea;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        body.dark-mode .section h2 {
+            color: #60a5fa;
+            border-bottom-color: #60a5fa;
         }
 
         .section h3 {
-            color: #764ba2;
+            color: var(--secondary);
             font-size: 1.5em;
             margin-top: 25px;
             margin-bottom: 15px;
+        }
+
+        body.dark-mode .section h3 {
+            color: #a78bfa;
         }
 
         .section h4 {
@@ -138,17 +229,37 @@
             margin-bottom: 10px;
         }
 
+        body.dark-mode .section h4 {
+            color: #cbd5e0;
+        }
+
+        /* Cards */
         .workflow-card {
             background: #f8f9fa;
-            border-left: 4px solid #667eea;
+            border-left: 4px solid var(--primary);
             padding: 20px;
             margin: 15px 0;
             border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        body.dark-mode .workflow-card {
+            background: #4a5568;
+            border-left-color: #60a5fa;
+        }
+
+        .workflow-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
         }
 
         .workflow-card h4 {
-            color: #667eea;
+            color: var(--primary);
             margin-top: 0;
+        }
+
+        body.dark-mode .workflow-card h4 {
+            color: #60a5fa;
         }
 
         .workflow-card ul {
@@ -161,14 +272,21 @@
             color: #555;
         }
 
+        body.dark-mode .workflow-card li {
+            color: #cbd5e0;
+        }
+
+        /* Tables */
         table {
             width: 100%;
             border-collapse: collapse;
             margin: 20px 0;
+            border-radius: 5px;
+            overflow: hidden;
         }
 
         table th {
-            background: #667eea;
+            background: var(--primary);
             color: white;
             padding: 12px;
             text-align: left;
@@ -180,10 +298,19 @@
             padding: 12px;
         }
 
+        body.dark-mode table td {
+            border-bottom-color: #4a5568;
+        }
+
         table tr:hover {
             background: #f8f9fa;
         }
 
+        body.dark-mode table tr:hover {
+            background: #4a5568;
+        }
+
+        /* Code Blocks */
         .code-block {
             background: #2d2d2d;
             color: #f8f8f2;
@@ -194,8 +321,28 @@
             font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
             font-size: 0.9em;
             line-height: 1.5;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s;
         }
 
+        .code-block:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .code-block:hover::after {
+            content: "📋 Click to copy";
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            font-size: 0.8em;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 5px 10px;
+            border-radius: 3px;
+            color: #fff;
+        }
+
+        /* Badges */
         .badge {
             display: inline-block;
             padding: 4px 12px;
@@ -226,11 +373,16 @@
             color: #721c24;
         }
 
+        /* Checklist */
         .checklist {
             background: #f8f9fa;
             padding: 20px;
             border-radius: 5px;
             margin: 15px 0;
+        }
+
+        body.dark-mode .checklist {
+            background: #4a5568;
         }
 
         .checklist ul {
@@ -248,11 +400,23 @@
             content: "☐";
             position: absolute;
             left: 0;
-            color: #667eea;
+            color: var(--primary);
             font-weight: bold;
             font-size: 1.2em;
+            cursor: pointer;
         }
 
+        .checklist li.checked:before {
+            content: "☑";
+            color: var(--success);
+        }
+
+        .checklist li.checked {
+            opacity: 0.6;
+            text-decoration: line-through;
+        }
+
+        /* Flow Diagram */
         .flow-diagram {
             background: #f8f9fa;
             padding: 20px;
@@ -262,9 +426,16 @@
             white-space: pre-wrap;
             word-wrap: break-word;
             color: #555;
-            border-left: 4px solid #667eea;
+            border-left: 4px solid var(--primary);
+            overflow-x: auto;
         }
 
+        body.dark-mode .flow-diagram {
+            background: #4a5568;
+            color: #cbd5e0;
+        }
+
+        /* Buttons */
         .button-group {
             display: flex;
             gap: 10px;
@@ -285,12 +456,12 @@
         }
 
         .btn-primary {
-            background: #667eea;
+            background: var(--primary);
             color: white;
         }
 
         .btn-primary:hover {
-            background: #764ba2;
+            background: var(--secondary);
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
         }
@@ -301,10 +472,21 @@
             border: 1px solid #ddd;
         }
 
+        body.dark-mode .btn-secondary {
+            background: #4a5568;
+            color: #e2e8f0;
+            border-color: #718096;
+        }
+
         .btn-secondary:hover {
             background: #e0e0e0;
         }
 
+        body.dark-mode .btn-secondary:hover {
+            background: #5a6b7f;
+        }
+
+        /* Alerts */
         .alert {
             padding: 15px;
             border-radius: 5px;
@@ -318,10 +500,20 @@
             color: #0c5460;
         }
 
+        body.dark-mode .alert-info {
+            background: #1e3a4c;
+            color: #a0d8e8;
+        }
+
         .alert-warning {
             background: #fff3cd;
             border-color: #856404;
             color: #856404;
+        }
+
+        body.dark-mode .alert-warning {
+            background: #4a3c1a;
+            color: #f5d547;
         }
 
         .alert-success {
@@ -330,12 +522,23 @@
             color: #155724;
         }
 
+        body.dark-mode .alert-success {
+            background: #1e4620;
+            color: #7dd87d;
+        }
+
         .alert-danger {
             background: #f8d7da;
             border-color: #721c24;
             color: #721c24;
         }
 
+        body.dark-mode .alert-danger {
+            background: #4a1c1c;
+            color: #f5a5a5;
+        }
+
+        /* Footer */
         footer {
             background: white;
             padding: 20px;
@@ -346,34 +549,130 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
 
-        .toc {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 5px;
+        body.dark-mode footer {
+            background: #2d3748;
+            color: #cbd5e0;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 10px;
             margin: 20px 0;
+            border-bottom: 2px solid #ddd;
         }
 
-        .toc h3 {
-            margin-top: 0;
+        body.dark-mode .tabs {
+            border-bottom-color: #4a5568;
         }
 
-        .toc ol {
-            margin-left: 20px;
+        .tab-button {
+            background: none;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            color: #666;
+            font-weight: 600;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
         }
 
-        .toc li {
-            margin-bottom: 8px;
+        body.dark-mode .tab-button {
+            color: #cbd5e0;
         }
 
-        .toc a {
-            color: #667eea;
-            text-decoration: none;
+        .tab-button.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
         }
 
-        .toc a:hover {
-            text-decoration: underline;
+        body.dark-mode .tab-button.active {
+            color: #60a5fa;
+            border-bottom-color: #60a5fa;
         }
 
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Expandable Sections */
+        .expandable {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+
+        body.dark-mode .expandable {
+            background: #4a5568;
+            border-color: #718096;
+        }
+
+        .expandable-header {
+            padding: 15px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: var(--primary);
+            user-select: none;
+        }
+
+        body.dark-mode .expandable-header {
+            color: #60a5fa;
+        }
+
+        .expandable-header:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .expandable-content {
+            display: none;
+            padding: 15px;
+            border-top: 1px solid #ddd;
+        }
+
+        body.dark-mode .expandable-content {
+            border-top-color: #718096;
+        }
+
+        .expandable-content.active {
+            display: block;
+        }
+
+        .expand-icon {
+            transition: transform 0.3s;
+        }
+
+        .expand-icon.active {
+            transform: rotate(180deg);
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            background: #e0e0e0;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        body.dark-mode .progress-bar {
+            background: #4a5568;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            height: 100%;
+            transition: width 0.3s;
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
             .content {
                 grid-template-columns: 1fr;
@@ -381,9 +680,15 @@
 
             .sidebar {
                 position: static;
+                max-height: none;
             }
 
-            header h1 {
+            header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            header .header-content h1 {
                 font-size: 1.8em;
             }
 
@@ -399,22 +704,119 @@
                 width: 100%;
                 text-align: center;
             }
+
+            .header-controls {
+                margin-top: 15px;
+                width: 100%;
+                justify-content: center;
+            }
         }
 
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        body.dark-mode ::-webkit-scrollbar-track {
+            background: #2d3748;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary);
+        }
+
+        /* Animations */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section {
+            animation: slideIn 0.5s ease-out;
+        }
+
+        /* Highlight */
         .highlight {
             background: #fff3cd;
             padding: 2px 6px;
             border-radius: 3px;
+        }
+
+        body.dark-mode .highlight {
+            background: #4a3c1a;
+        }
+
+        /* Stats Box */
+        .stats-box {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            border-top: 3px solid var(--primary);
+        }
+
+        body.dark-mode .stat-item {
+            background: #4a5568;
+            border-top-color: #60a5fa;
+        }
+
+        .stat-number {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        body.dark-mode .stat-number {
+            color: #60a5fa;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        body.dark-mode .stat-label {
+            color: #cbd5e0;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>🚀 CI/CD Pipeline Guide</h1>
-            <p>คู่มือการใช้งาน GitHub Actions CI/CD Pipeline สำหรับ TechSpark Platform</p>
-            <div class="breadcrumb">
-                <a href="/">Home</a> / <a href="/docs">Documentation</a> / CI/CD Guide
+            <div class="header-content">
+                <h1>🚀 CI/CD Pipeline Guide</h1>
+                <p>คู่มือการใช้งาน GitHub Actions CI/CD Pipeline สำหรับ TechSpark Platform</p>
+                <div class="breadcrumb">
+                    <a href="/">Home</a> / <a href="/docs">Documentation</a> / CI/CD Guide
+                </div>
+            </div>
+            <div class="header-controls">
+                <button class="theme-toggle" onclick="toggleTheme()">🌙 Dark Mode</button>
+                <button class="toc-toggle" onclick="toggleSidebar()">📋 TOC</button>
             </div>
         </header>
 
@@ -428,6 +830,7 @@
                     <li><a href="#secrets">Secrets</a></li>
                     <li><a href="#monitoring">Monitoring</a></li>
                     <li><a href="#troubleshooting">Troubleshooting</a></li>
+                    <li><a href="#performance">Performance</a></li>
                     <li><a href="#resources">Resources</a></li>
                 </ul>
             </aside>
@@ -448,6 +851,26 @@
                             <li><span class="badge badge-success">✅</span> Release Management</li>
                             <li><span class="badge badge-success">✅</span> Documentation Publishing</li>
                         </ul>
+                    </div>
+
+                    <h3>📊 Pipeline Statistics</h3>
+                    <div class="stats-box">
+                        <div class="stat-item">
+                            <div class="stat-number">5</div>
+                            <div class="stat-label">Workflows</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">15+</div>
+                            <div class="stat-label">Jobs</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">50+</div>
+                            <div class="stat-label">Steps</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">100%</div>
+                            <div class="stat-label">Automated</div>
+                        </div>
                     </div>
 
                     <h3>🔄 Pipeline Flow</h3>
@@ -475,74 +898,113 @@
                 <section class="section" id="workflows">
                     <h2>🔄 Workflows</h2>
 
-                    <h3>1. Lint & Test</h3>
-                    <div class="workflow-card">
-                        <h4>lint-and-test.yml</h4>
-                        <p><strong>Trigger:</strong> Push to main/develop, Pull Request</p>
-                        <p><strong>Jobs:</strong></p>
-                        <ul>
-                            <li><strong>lint</strong> - ESLint, TypeScript, Prettier</li>
-                            <li><strong>test</strong> - Unit tests, Coverage</li>
-                            <li><strong>build</strong> - Build artifacts</li>
-                            <li><strong>security</strong> - Vulnerability scanning</li>
-                            <li><strong>documentation</strong> - Documentation validation</li>
-                        </ul>
+                    <div class="expandable">
+                        <div class="expandable-header" onclick="toggleExpandable(this)">
+                            <span>1. Lint & Test Workflow</span>
+                            <span class="expand-icon">▼</span>
+                        </div>
+                        <div class="expandable-content">
+                            <div class="workflow-card">
+                                <h4>lint-and-test.yml</h4>
+                                <p><strong>Trigger:</strong> Push to main/develop, Pull Request</p>
+                                <p><strong>Jobs:</strong></p>
+                                <ul>
+                                    <li><strong>lint</strong> - ESLint, TypeScript, Prettier</li>
+                                    <li><strong>test</strong> - Unit tests, Coverage</li>
+                                    <li><strong>build</strong> - Build artifacts</li>
+                                    <li><strong>security</strong> - Vulnerability scanning</li>
+                                    <li><strong>documentation</strong> - Documentation validation</li>
+                                </ul>
+                                <h4 style="margin-top: 15px;">Progress</h4>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 100%"></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <h3>2. Deploy</h3>
-                    <div class="workflow-card">
-                        <h4>deploy.yml</h4>
-                        <p><strong>Trigger:</strong> Push to main, Manual trigger</p>
-                        <p><strong>Jobs:</strong></p>
-                        <ul>
-                            <li>Build Frontend</li>
-                            <li>Deploy to Vercel</li>
-                            <li>Create GitHub Release</li>
-                            <li>Notify Slack</li>
-                        </ul>
+                    <div class="expandable">
+                        <div class="expandable-header" onclick="toggleExpandable(this)">
+                            <span>2. Deploy Workflow</span>
+                            <span class="expand-icon">▼</span>
+                        </div>
+                        <div class="expandable-content">
+                            <div class="workflow-card">
+                                <h4>deploy.yml</h4>
+                                <p><strong>Trigger:</strong> Push to main, Manual trigger</p>
+                                <p><strong>Jobs:</strong></p>
+                                <ul>
+                                    <li>Build Frontend</li>
+                                    <li>Deploy to Vercel</li>
+                                    <li>Create GitHub Release</li>
+                                    <li>Notify Slack</li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
 
-                    <h3>3. Code Quality</h3>
-                    <div class="workflow-card">
-                        <h4>code-quality.yml</h4>
-                        <p><strong>Trigger:</strong> Push to main/develop, Pull Request</p>
-                        <p><strong>Jobs:</strong></p>
-                        <ul>
-                            <li>SonarQube Analysis</li>
-                            <li>Dependency Check</li>
-                            <li>License Verification</li>
-                            <li>Performance Analysis</li>
-                            <li>Accessibility Check</li>
-                        </ul>
+                    <div class="expandable">
+                        <div class="expandable-header" onclick="toggleExpandable(this)">
+                            <span>3. Code Quality Workflow</span>
+                            <span class="expand-icon">▼</span>
+                        </div>
+                        <div class="expandable-content">
+                            <div class="workflow-card">
+                                <h4>code-quality.yml</h4>
+                                <p><strong>Trigger:</strong> Push to main/develop, Pull Request</p>
+                                <p><strong>Jobs:</strong></p>
+                                <ul>
+                                    <li>SonarQube Analysis</li>
+                                    <li>Dependency Check</li>
+                                    <li>License Verification</li>
+                                    <li>Performance Analysis</li>
+                                    <li>Accessibility Check</li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
 
-                    <h3>4. Release</h3>
-                    <div class="workflow-card">
-                        <h4>release.yml</h4>
-                        <p><strong>Trigger:</strong> Push tag (v*), Manual trigger</p>
-                        <p><strong>Jobs:</strong></p>
-                        <ul>
-                            <li>Create Release Notes</li>
-                            <li>Publish Release</li>
-                            <li>Update CHANGELOG</li>
-                            <li>Deploy Documentation</li>
-                            <li>Announce Release</li>
-                        </ul>
+                    <div class="expandable">
+                        <div class="expandable-header" onclick="toggleExpandable(this)">
+                            <span>4. Release Workflow</span>
+                            <span class="expand-icon">▼</span>
+                        </div>
+                        <div class="expandable-content">
+                            <div class="workflow-card">
+                                <h4>release.yml</h4>
+                                <p><strong>Trigger:</strong> Push tag (v*), Manual trigger</p>
+                                <p><strong>Jobs:</strong></p>
+                                <ul>
+                                    <li>Create Release Notes</li>
+                                    <li>Publish Release</li>
+                                    <li>Update CHANGELOG</li>
+                                    <li>Deploy Documentation</li>
+                                    <li>Announce Release</li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
 
-                    <h3>5. PR Checks</h3>
-                    <div class="workflow-card">
-                        <h4>pr-checks.yml</h4>
-                        <p><strong>Trigger:</strong> Pull Request</p>
-                        <p><strong>Jobs:</strong></p>
-                        <ul>
-                            <li>PR Title Validation</li>
-                            <li>PR Description Check</li>
-                            <li>File Changes Check</li>
-                            <li>Commit Lint</li>
-                            <li>Dependency Check</li>
-                            <li>Code Review Hints</li>
-                        </ul>
+                    <div class="expandable">
+                        <div class="expandable-header" onclick="toggleExpandable(this)">
+                            <span>5. PR Checks Workflow</span>
+                            <span class="expand-icon">▼</span>
+                        </div>
+                        <div class="expandable-content">
+                            <div class="workflow-card">
+                                <h4>pr-checks.yml</h4>
+                                <p><strong>Trigger:</strong> Pull Request</p>
+                                <p><strong>Jobs:</strong></p>
+                                <ul>
+                                    <li>PR Title Validation</li>
+                                    <li>PR Description Check</li>
+                                    <li>File Changes Check</li>
+                                    <li>Commit Lint</li>
+                                    <li>Dependency Check</li>
+                                    <li>Code Review Hints</li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </section>
 
@@ -614,11 +1076,11 @@
                     <h3>Setup Checklist</h3>
                     <div class="checklist">
                         <ul>
-                            <li>Add Secrets to GitHub (VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID)</li>
-                            <li>Configure Branch Protection</li>
-                            <li>Setup Vercel Integration</li>
-                            <li>Test Workflows</li>
-                            <li>Monitor Workflows</li>
+                            <li onclick="toggleCheckbox(this)">Add Secrets to GitHub (VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID)</li>
+                            <li onclick="toggleCheckbox(this)">Configure Branch Protection</li>
+                            <li onclick="toggleCheckbox(this)">Setup Vercel Integration</li>
+                            <li onclick="toggleCheckbox(this)">Test Workflows</li>
+                            <li onclick="toggleCheckbox(this)">Monitor Workflows</li>
                         </ul>
                     </div>
                 </section>
@@ -663,18 +1125,39 @@ Settings → Secrets and variables → Actions → New repository secret</div>
                         <li>View workflow runs</li>
                     </ol>
 
-                    <h3>Status Badges</h3>
-                    <p>Add to README:</p>
-                    <div class="code-block">![Lint & Test](https://github.com/techspark-ai/techspark-platform/workflows/Lint%20&%20Test/badge.svg)
+                    <h3>Workflow Tabs</h3>
+                    <div class="tabs">
+                        <button class="tab-button active" onclick="switchTab(event, 'tab1')">Status Badges</button>
+                        <button class="tab-button" onclick="switchTab(event, 'tab2')">Notifications</button>
+                        <button class="tab-button" onclick="switchTab(event, 'tab3')">Metrics</button>
+                    </div>
+
+                    <div id="tab1" class="tab-content active">
+                        <h4>Status Badges</h4>
+                        <p>Add to README:</p>
+                        <div class="code-block">![Lint & Test](https://github.com/techspark-ai/techspark-platform/workflows/Lint%20&%20Test/badge.svg)
 ![Deploy](https://github.com/techspark-ai/techspark-platform/workflows/Deploy/badge.svg)
 ![Code Quality](https://github.com/techspark-ai/techspark-platform/workflows/Code%20Quality/badge.svg)</div>
+                    </div>
 
-                    <h3>Notifications</h3>
-                    <ul>
-                        <li>Email notifications (default)</li>
-                        <li>Slack notifications (optional)</li>
-                        <li>Custom webhooks</li>
-                    </ul>
+                    <div id="tab2" class="tab-content">
+                        <h4>Notifications</h4>
+                        <ul>
+                            <li>Email notifications (default)</li>
+                            <li>Slack notifications (optional)</li>
+                            <li>Custom webhooks</li>
+                        </ul>
+                    </div>
+
+                    <div id="tab3" class="tab-content">
+                        <h4>Key Metrics</h4>
+                        <ul>
+                            <li>Build success rate</li>
+                            <li>Average build time</li>
+                            <li>Test coverage</li>
+                            <li>Deployment frequency</li>
+                        </ul>
+                    </div>
                 </section>
 
                 <!-- Troubleshooting Section -->
@@ -683,39 +1166,80 @@ Settings → Secrets and variables → Actions → New repository secret</div>
 
                     <h3>Common Issues</h3>
 
-                    <h4>1. Build Fails</h4>
-                    <div class="alert alert-warning">
-                        <strong>Solution:</strong>
-                        <ul>
-                            <li>Check logs in Actions tab</li>
-                            <li>Common causes: Missing dependencies, Environment variables not set, Node version mismatch</li>
-                        </ul>
+                    <div class="expandable">
+                        <div class="expandable-header" onclick="toggleExpandable(this)">
+                            <span>Build Fails</span>
+                            <span class="expand-icon">▼</span>
+                        </div>
+                        <div class="expandable-content">
+                            <div class="alert alert-warning">
+                                <strong>Solution:</strong>
+                                <ul>
+                                    <li>Check logs in Actions tab</li>
+                                    <li>Common causes: Missing dependencies, Environment variables not set, Node version mismatch</li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
 
-                    <h4>2. Deployment Fails</h4>
-                    <div class="alert alert-warning">
-                        <strong>Solution:</strong>
-                        <ul>
-                            <li>Check Vercel logs</li>
-                            <li>Verify secrets are set correctly</li>
-                            <li>Check branch protection rules</li>
-                        </ul>
+                    <div class="expandable">
+                        <div class="expandable-header" onclick="toggleExpandable(this)">
+                            <span>Deployment Fails</span>
+                            <span class="expand-icon">▼</span>
+                        </div>
+                        <div class="expandable-content">
+                            <div class="alert alert-warning">
+                                <strong>Solution:</strong>
+                                <ul>
+                                    <li>Check Vercel logs</li>
+                                    <li>Verify secrets are set correctly</li>
+                                    <li>Check branch protection rules</li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
 
-                    <h4>3. Tests Fail</h4>
-                    <div class="alert alert-warning">
-                        <strong>Solution:</strong>
-                        <ul>
-                            <li>Run tests locally: <code>npm run test</code></li>
-                            <li>Check test configuration</li>
-                            <li>Review test output in GitHub Actions</li>
-                        </ul>
+                    <div class="expandable">
+                        <div class="expandable-header" onclick="toggleExpandable(this)">
+                            <span>Tests Fail</span>
+                            <span class="expand-icon">▼</span>
+                        </div>
+                        <div class="expandable-content">
+                            <div class="alert alert-warning">
+                                <strong>Solution:</strong>
+                                <ul>
+                                    <li>Run tests locally: <code>npm run test</code></li>
+                                    <li>Check test configuration</li>
+                                    <li>Review test output in GitHub Actions</li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
 
                     <h3>Debug Mode</h3>
                     <p>Enable debug logging:</p>
                     <div class="code-block">env:
   ACTIONS_STEP_DEBUG: true</div>
+                </section>
+
+                <!-- Performance Section -->
+                <section class="section" id="performance">
+                    <h2>⚡ Performance Optimization</h2>
+
+                    <h3>Caching</h3>
+                    <div class="code-block">- uses: actions/setup-node@v4
+  with:
+    cache: 'npm'</div>
+
+                    <h3>Parallel Jobs</h3>
+                    <div class="alert alert-success">
+                        <strong>✅ Current Setup:</strong>
+                        <p>Lint, Test, and Build jobs run in parallel for faster feedback</p>
+                    </div>
+
+                    <h3>Conditional Steps</h3>
+                    <div class="code-block">- if: github.ref == 'refs/heads/main'
+  run: npm run deploy</div>
                 </section>
 
                 <!-- Resources Section -->
@@ -759,19 +1283,72 @@ Settings → Secrets and variables → Actions → New repository secret</div>
     </div>
 
     <script>
-        // Smooth scrolling for anchor links
+        // Theme Toggle
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+        }
+
+        // Load saved theme
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+        }
+
+        // Sidebar Toggle
+        function toggleSidebar() {
+            document.querySelector('.sidebar').style.display = 
+                document.querySelector('.sidebar').style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Smooth scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
             });
         });
+
+        // Copy code blocks
+        document.querySelectorAll('.code-block').forEach(block => {
+            block.addEventListener('click', () => {
+                const text = block.textContent;
+                navigator.clipboard.writeText(text).then(() => {
+                    const originalText = block.textContent;
+                    block.textContent = '✅ Copied!';
+                    setTimeout(() => {
+                        block.textContent = originalText;
+                    }, 2000);
+                });
+            });
+        });
+
+        // Expandable sections
+        function toggleExpandable(header) {
+            const content = header.nextElementSibling;
+            const icon = header.querySelector('.expand-icon');
+            content.classList.toggle('active');
+            icon.classList.toggle('active');
+        }
+
+        // Checklist
+        function toggleCheckbox(item) {
+            item.classList.toggle('checked');
+        }
+
+        // Tabs
+        function switchTab(evt, tabName) {
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(button => button.classList.remove('active'));
+            
+            document.getElementById(tabName).classList.add('active');
+            evt.currentTarget.classList.add('active');
+        }
 
         // Highlight current section in sidebar
         window.addEventListener('scroll', () => {
@@ -784,26 +1361,10 @@ Settings → Secrets and variables → Actions → New repository secret</div>
                     sidebarLinks.forEach(link => link.style.color = '#666');
                     const activeLink = document.querySelector(`.sidebar a[href="#${section.id}"]`);
                     if (activeLink) {
-                        activeLink.style.color = '#667eea';
+                        activeLink.style.color = 'var(--primary)';
                         activeLink.style.fontWeight = '600';
                     }
                 }
-            });
-        });
-
-        // Copy code block on click
-        document.querySelectorAll('.code-block').forEach(block => {
-            block.style.cursor = 'pointer';
-            block.title = 'Click to copy';
-            block.addEventListener('click', () => {
-                const text = block.textContent;
-                navigator.clipboard.writeText(text).then(() => {
-                    const originalText = block.textContent;
-                    block.textContent = '✅ Copied!';
-                    setTimeout(() => {
-                        block.textContent = originalText;
-                    }, 2000);
-                });
             });
         });
     </script>
