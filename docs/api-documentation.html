@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation - TechSpark AI Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            --light: #f8f9fa;
+            --dark: #2d3748;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            transition: background 0.3s ease;
+        }
+
+        body.dark-mode {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: #e2e8f0;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            padding: 40px 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        body.dark-mode header {
+            background: #2d3748;
+            color: #e2e8f0;
+        }
+
+        header .header-content h1 {
+            color: var(--primary);
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        body.dark-mode header .header-content h1 {
+            color: #60a5fa;
+        }
+
+        header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        body.dark-mode header p {
+            color: #cbd5e0;
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .theme-toggle, .toc-toggle {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s;
+        }
+
+        .theme-toggle:hover, .toc-toggle:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Main Layout */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+            
+            .sidebar.mobile-open {
+                display: block;
+            }
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode .sidebar {
+            background: #2d3748;
+        }
+
+        .sidebar h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        body.dark-mode .sidebar h3 {
+            color: #60a5fa;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar li {
+            margin: 8px 0;
+        }
+
+        .sidebar a {
+            color: #666;
+            text-decoration: none;
+            display: block;
+            padding: 8px 10px;
+            border-radius: 5px;
+            transition: all 0.3s;
+            font-size: 0.95em;
+        }
+
+        body.dark-mode .sidebar a {
+            color: #cbd5e0;
+        }
+
+        .sidebar a:hover, .sidebar a.active {
+            background: var(--primary);
+            color: white;
+            padding-left: 15px;
+        }
+
+        /* Content */
+        .content {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode .content {
+            background: #2d3748;
+        }
+
+        /* API Endpoint Card */
+        .api-endpoint {
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        body.dark-mode .api-endpoint {
+            border-color: #4a5568;
+        }
+
+        .endpoint-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .endpoint-header:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .endpoint-method {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-right: 10px;
+            font-size: 0.9em;
+        }
+
+        .method-get {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .method-post {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .method-put {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .method-delete {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .endpoint-path {
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.95em;
+        }
+
+        .endpoint-icon {
+            font-size: 1.5em;
+            transition: transform 0.3s;
+        }
+
+        .api-endpoint.expanded .endpoint-icon {
+            transform: rotate(180deg);
+        }
+
+        .endpoint-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        body.dark-mode .endpoint-content {
+            background: #1a202c;
+        }
+
+        .api-endpoint.expanded .endpoint-content {
+            max-height: 3000px;
+        }
+
+        .endpoint-content-inner {
+            padding: 20px;
+        }
+
+        /* Code Block */
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            position: relative;
+        }
+
+        .code-block pre {
+            margin: 0;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.9em;
+        }
+
+        .copy-code-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.8em;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .code-block:hover .copy-code-btn {
+            opacity: 1;
+        }
+
+        .copy-code-btn:hover {
+            background: var(--secondary);
+        }
+
+        .copy-code-btn.copied {
+            background: var(--success);
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            border-bottom: 2px solid #e0e0e0;
+            flex-wrap: wrap;
+        }
+
+        body.dark-mode .tabs {
+            border-bottom-color: #4a5568;
+        }
+
+        .tab-button {
+            background: none;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 1em;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        body.dark-mode .tab-button {
+            color: #cbd5e0;
+        }
+
+        .tab-button:hover, .tab-button.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Alert Boxes */
+        .alert {
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            border-color: #10b981;
+            color: #065f46;
+        }
+
+        body.dark-mode .alert-success {
+            background: rgba(16, 185, 129, 0.1);
+            color: #a7f3d0;
+        }
+
+        .alert-warning {
+            background: #fef3c7;
+            border-color: #f59e0b;
+            color: #92400e;
+        }
+
+        body.dark-mode .alert-warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: #fcd34d;
+        }
+
+        .alert-info {
+            background: #dbeafe;
+            border-color: #3b82f6;
+            color: #1e3a8a;
+        }
+
+        body.dark-mode .alert-info {
+            background: rgba(59, 130, 246, 0.1);
+            color: #93c5fd;
+        }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin: 5px 5px 5px 0;
+        }
+
+        .status-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .status-warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        /* Headings */
+        h2 {
+            color: var(--primary);
+            margin: 30px 0 15px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        body.dark-mode h2 {
+            color: #60a5fa;
+            border-bottom-color: #60a5fa;
+        }
+
+        h3 {
+            color: var(--secondary);
+            margin: 20px 0 10px 0;
+        }
+
+        body.dark-mode h3 {
+            color: #a78bfa;
+        }
+
+        h4 {
+            color: #666;
+            margin: 15px 0 10px 0;
+        }
+
+        body.dark-mode h4 {
+            color: #cbd5e0;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        body.dark-mode th, body.dark-mode td {
+            border-bottom-color: #4a5568;
+        }
+
+        th {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            font-weight: bold;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        body.dark-mode tr:hover {
+            background: #1a202c;
+        }
+
+        /* Parameter List */
+        .parameter-list {
+            margin: 15px 0;
+        }
+
+        .parameter-item {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 5px;
+            margin: 8px 0;
+            border-left: 3px solid var(--primary);
+        }
+
+        body.dark-mode .parameter-item {
+            background: #1a202c;
+            border-left-color: #60a5fa;
+        }
+
+        .parameter-name {
+            font-weight: bold;
+            color: var(--primary);
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        }
+
+        body.dark-mode .parameter-name {
+            color: #60a5fa;
+        }
+
+        .parameter-type {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 0.85em;
+            margin-left: 10px;
+            font-weight: bold;
+        }
+
+        .parameter-required {
+            color: var(--danger);
+            font-weight: bold;
+        }
+
+        .parameter-description {
+            margin-top: 5px;
+            color: #666;
+        }
+
+        body.dark-mode .parameter-description {
+            color: #cbd5e0;
+        }
+
+        /* Response Example */
+        .response-example {
+            margin: 15px 0;
+        }
+
+        .response-status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .status-200 {
+            background: var(--success);
+            color: white;
+        }
+
+        .status-400 {
+            background: var(--warning);
+            color: white;
+        }
+
+        .status-500 {
+            background: var(--danger);
+            color: white;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: white;
+            margin-top: 40px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            header .header-content h1 {
+                font-size: 1.8em;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .endpoint-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            table {
+                font-size: 0.9em;
+            }
+
+            th, td {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="header-content">
+                <h1>📚 API Documentation</h1>
+                <p>TechSpark AI Platform - Complete API Reference</p>
+            </div>
+            <div class="header-controls">
+                <button class="theme-toggle" onclick="toggleTheme()">🌙 Dark Mode</button>
+                <button class="toc-toggle" onclick="toggleSidebar()">☰ Menu</button>
+            </div>
+        </header>
+
+        <div class="main-layout">
+            <!-- Sidebar -->
+            <aside class="sidebar" id="sidebar">
+                <h3>📑 API Endpoints</h3>
+                <ul>
+                    <li><a href="#overview" onclick="scrollTo('overview')">Overview</a></li>
+                    <li><a href="#authentication" onclick="scrollTo('authentication')">Authentication</a></li>
+                    <li><a href="#sales-agent" onclick="scrollTo('sales-agent')">Sales Agent</a></li>
+                    <li><a href="#support-agent" onclick="scrollTo('support-agent')">Support Agent</a></li>
+                    <li><a href="#marketing-agent" onclick="scrollTo('marketing-agent')">Marketing Agent</a></li>
+                    <li><a href="#error-handling" onclick="scrollTo('error-handling')">Error Handling</a></li>
+                    <li><a href="#rate-limiting" onclick="scrollTo('rate-limiting')">Rate Limiting</a></li>
+                    <li><a href="#webhooks" onclick="scrollTo('webhooks')">Webhooks</a></li>
+                </ul>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="content">
+                <!-- Overview Section -->
+                <section id="overview">
+                    <h2>📋 Overview</h2>
+                    <p>TechSpark AI Platform provides a comprehensive REST API for integrating AI agents into your applications. All endpoints return JSON responses and support both HTTP and HTTPS protocols.</p>
+
+                    <div class="alert alert-info">
+                        <strong>ℹ️ Base URL:</strong> <code>https://api.techspark.ai/v1</code>
+                    </div>
+
+                    <h3>API Features</h3>
+                    <ul>
+                        <li>RESTful API design</li>
+                        <li>JSON request/response format</li>
+                        <li>OAuth 2.0 authentication</li>
+                        <li>Rate limiting (100 requests/minute)</li>
+                        <li>Webhook support for real-time events</li>
+                        <li>Comprehensive error handling</li>
+                        <li>API versioning (v1, v2, etc.)</li>
+                    </ul>
+
+                    <h3>Supported Content Types</h3>
+                    <div class="code-block">
+                        <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>
+Content-Type: application/json
+Accept: application/json
+                        </pre>
+                    </div>
+                </section>
+
+                <!-- Authentication Section -->
+                <section id="authentication">
+                    <h2>🔐 Authentication</h2>
+                    <p>All API requests require authentication using OAuth 2.0 Bearer tokens.</p>
+
+                    <h3>Getting Started</h3>
+                    <ol>
+                        <li>Create an account on TechSpark AI Platform</li>
+                        <li>Generate API key from dashboard</li>
+                        <li>Include token in Authorization header</li>
+                    </ol>
+
+                    <h3>Request Header</h3>
+                    <div class="code-block">
+                        <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>
+Authorization: Bearer YOUR_API_TOKEN
+Content-Type: application/json
+                        </pre>
+                    </div>
+
+                    <h3>Example Request</h3>
+                    <div class="code-block">
+                        <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>
+curl -X GET https://api.techspark.ai/v1/agents \
+  -H "Authorization: Bearer sk_test_1234567890" \
+  -H "Content-Type: application/json"
+                        </pre>
+                    </div>
+
+                    <div class="alert alert-warning">
+                        <strong>⚠️ Security:</strong> Never share your API token. Keep it secret and secure.
+                    </div>
+                </section>
+
+                <!-- Sales Agent API -->
+                <section id="sales-agent">
+                    <h2>💼 Sales Agent API</h2>
+
+                    <!-- Chat Endpoint -->
+                    <div class="api-endpoint">
+                        <div class="endpoint-header" onclick="toggleEndpoint(this)">
+                            <div>
+                                <span class="endpoint-method method-post">POST</span>
+                                <span class="endpoint-path">/agents/sales/chat</span>
+                            </div>
+                            <span class="endpoint-icon">▼</span>
+                        </div>
+                        <div class="endpoint-content">
+                            <div class="endpoint-content-inner">
+                                <p><strong>Description:</strong> Send a message to the sales agent and get a response.</p>
+
+                                <h4>Request Body</h4>
+                                <div class="parameter-list">
+                                    <div class="parameter-item">
+                                        <span class="parameter-name">message</span>
+                                        <span class="parameter-type">string</span>
+                                        <span class="parameter-required">required</span>
+                                        <div class="parameter-description">Customer message or inquiry</div>
+                                    </div>
+                                    <div class="parameter-item">
+                                        <span class="parameter-name">customer_id</span>
+                                        <span class="parameter-type">string</span>
+                                        <div class="parameter-description">Optional customer identifier</div>
+                                    </div>
+                                    <div class="parameter-item">
+                                        <span class="parameter-name">conversation_id</span>
+                                        <span class="parameter-type">string</span>
+                                        <div class="parameter-description">Optional conversation context</div>
+                                    </div>
+                                </div>
+
+                                <h4>Request Example</h4>
+                                <div class="code-block">
+                                    <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+                                    <pre>
+{
+  "message": "I'm interested in AI solutions for my e-commerce store",
+  "customer_id": "cust_123456",
+  "conversation_id": "conv_789012"
+}
+                                    </pre>
+                                </div>
+
+                                <h4>Response</h4>
+                                <div class="response-example">
+                                    <span class="response-status status-200">200 OK</span>
+                                    <div class="code-block">
+                                        <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+                                        <pre>
+{
+  "status": "success",
+  "response": "Great! I can help you with AI solutions...",
+  "conversation_id": "conv_789012",
+  "timestamp": "2026-03-31T10:30:45.123456Z",
+  "next_action": "quote_generation"
+}
+                                        </pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Generate Quote Endpoint -->
+                    <div class="api-endpoint">
+                        <div class="endpoint-header" onclick="toggleEndpoint(this)">
+                            <div>
+                                <span class="endpoint-method method-post">POST</span>
+                                <span class="endpoint-path">/agents/sales/quote</span>
+                            </div>
+                            <span class="endpoint-icon">▼</span>
+                        </div>
+                        <div class="endpoint-content">
+                            <div class="endpoint-content-inner">
+                                <p><strong>Description:</strong> Generate a quote for the customer.</p>
+
+                                <h4>Request Body</h4>
+                                <div class="parameter-list">
+                                    <div class="parameter-item">
+                                        <span class="parameter-name">customer_name</span>
+                                        <span class="parameter-type">string</span>
+                                        <span class="parameter-required">required</span>
+                                    </div>
+                                    <div class="parameter-item">
+                                        <span class="parameter-name">company_name</span>
+                                        <span class="parameter-type">string</span>
+                                        <span class="parameter-required">required</span>
+                                    </div>
+                                    <div class="parameter-item">
+                                        <span class="parameter-name">agents_needed</span>
+                                        <span class="parameter-type">array</span>
+                                        <span class="parameter-required">required</span>
+                                        <div class="parameter-description">Array of agent names: ["Sales AI", "Support AI", etc.]</div>
+                                    </div>
+                                    <div class="parameter-item">
+                                        <span class="parameter-name">monthly_volume</span>
+                                        <span class="parameter-type">number</span>
+                                        <div class="parameter-description">Estimated monthly transactions</div>
+                                    </div>
+                                </div>
+
+                                <h4>Request Example</h4>
+                                <div class="code-block">
+                                    <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+                                    <pre>
+{
+  "customer_name": "John Smith",
+  "company_name": "TechStore Thailand",
+  "agents_needed": ["Sales AI", "Support AI"],
+  "monthly_volume": 10000
+}
+                                    </pre>
+                                </div>
+
+                                <h4>Response</h4>
+                                <div class="response-example">
+                                    <span class="response-status status-200">200 OK</span>
+                                    <div class="code-block">
+                                        <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+                                        <pre>
+{
+  "status": "success",
+  "quote_id": "QT-20260331103045",
+  "customer_name": "John Smith",
+  "company_name": "TechStore Thailand",
+  "monthly_cost": 149.50,
+  "annual_cost": 1794.00,
+  "estimated_annual_savings": 7176.00,
+  "roi_multiplier": "4x",
+  "valid_until": "2026-03-31",
+  "created_at": "2026-03-31T10:30:45.123456Z"
+}
+                                    </pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Support Agent API -->
+                <section id="support-agent">
+                    <h2>🎧 Support Agent API</h2>
+
+                    <!-- Create Ticket Endpoint -->
+                    <div class="api-endpoint">
+                        <div class="endpoint-header" onclick="toggleEndpoint(this)">
+                            <div>
+                                <span class="endpoint-method method-post">POST</span>
+                                <span class="endpoint-path">/agents/support/tickets</span>
+                            </div>
+                            <span class="endpoint-icon">▼</span>
+                        </div>
+                        <div class="endpoint-content">
+                            <div class="endpoint-content-inner">
+                                <p><strong>Description:</strong> Create a support ticket.</p>
+
+                                <h4>Request Body</h4>
+                                <div class="parameter-list">
+                                    <div class="parameter-item">
+                                        <span class="parameter-name">customer_name</span>
+                                        <span class="parameter-type">string</span>
+                                        <span class="parameter-required">required</span>
+                                    </div>
+                                    <div class="parameter-item">
+                                        <span class="parameter-name">email</span>
+                                        <span class="parameter-type">string</span>
+                                        <span class="parameter-required">required</span>
+                                    </div>
+                                    <div class="parameter-item">
+                                        <span class="parameter-name">subject</span>
+                                        <span class="parameter-type">string</span>
+                                        <span class="parameter-required">required</span>
+                                    </div>
+                                    <div class="parameter-item">
+                                        <span class="parameter-name">description</span>
+                                        <span class="parameter-type">string</span>
+                                        <span class="parameter-required">required</span>
+                                    </div>
+                                    <div class="parameter-item">
+                                        <span class="parameter-name">priority</span>
+                                        <span class="parameter-type">string</span>
+                                        <div class="parameter-description">low, medium, high, critical</div>
+                                    </div>
+                                </div>
+
+                                <h4>Request Example</h4>
+                                <div class="code-block">
+                                    <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+                                    <pre>
+{
+  "customer_name": "Jane Doe",
+  "email": "jane@company.com",
+  "subject": "Integration issue",
+  "description": "Agent not responding to customer messages",
+  "priority": "high"
+}
+                                    </pre>
+                                </div>
+
+                                <h4>Response</h4>
+                                <div class="response-example">
+                                    <span class="response-status status-200">200 OK</span>
+                                    <div class="code-block">
+                                        <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+                                        <pre>
+{
+  "status": "success",
+  "ticket_id": "TK-20260331103045",
+  "customer_name": "Jane Doe",
+  "email": "jane@company.com",
+  "subject": "Integration issue",
+  "priority": "high",
+  "status": "open",
+  "created_at": "2026-03-31T10:30:45.123456Z"
+}
+                                    </pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Get Ticket Endpoint -->
+                    <div class="api-endpoint">
+                        <div class="endpoint-header" onclick="toggleEndpoint(this)">
+                            <div>
+                                <span class="endpoint-method method-get">GET</span>
+                                <span class="endpoint-path">/agents/support/tickets/{ticket_id}</span>
+                            </div>
+                            <span class="endpoint-icon">▼</span>
+                        </div>
+                        <div class="endpoint-content">
+                            <div class="endpoint-content-inner">
+                                <p><strong>Description:</strong> Get ticket details by ID.</p>
+
+                                <h4>Path Parameters</h4>
+                                <div class="parameter-list">
+                                    <div class="parameter-item">
+                                        <span class="parameter-name">ticket_id</span>
+                                        <span class="parameter-type">string</span>
+                                        <span class="parameter-required">required</span>
+                                        <div class="parameter-description">Ticket identifier (e.g., TK-20260331103045)</div>
+                                    </div>
+                                </div>
+
+                                <h4>Response</h4>
+                                <div class="response-example">
+                                    <span class="response-status status-200">200 OK</span>
+                                    <div class="code-block">
+                                        <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+                                        <pre>
+{
+  "status": "success",
+  "ticket_id": "TK-20260331103045",
+  "customer_name": "Jane Doe",
+  "subject": "Integration issue",
+  "priority": "high",
+  "status": "open",
+  "created_at": "2026-03-31T10:30:45.123456Z",
+  "updated_at": "2026-03-31T10:35:20.654321Z"
+}
+                                    </pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Marketing Agent API -->
+                <section id="marketing-agent">
+                    <h2>📱 Marketing Agent API</h2>
+
+                    <!-- Generate Content Endpoint -->
+                    <div class="api-endpoint">
+                        <div class="endpoint-header" onclick="toggleEndpoint(this)">
+                            <div>
+                                <span class="endpoint-method method-post">POST</span>
+                                <span class="endpoint-path">/agents/marketing/content</span>
+                            </div>
+                            <span class="endpoint-icon">▼</span>
+                        </div>
+                        <div class="endpoint-content">
+                            <div class="endpoint-content-inner">
+                                <p><strong>Description:</strong> Generate marketing content for social media.</p>
+
+                                <h4>Request Body</h4>
+                                <div class="parameter-list">
+                                    <div class="parameter-item">
+                                        <span class="parameter-name">platform</span>
+                                        <span class="parameter-type">string</span>
+                                        <span class="parameter-required">required</span>
+                                        <div class="parameter-description">facebook, instagram, twitter, linkedin</div>
+                                    </div>
+                                    <div class="parameter-item">
+                                        <span class="parameter-name">topic</span>
+                                        <span class="parameter-type">string</span>
+                                        <span class="parameter-required">required</span>
+                                    </div>
+                                    <div class="parameter-item">
+                                        <span class="parameter-name">tone</span>
+                                        <span class="parameter-type">string</span>
+                                        <div class="parameter-description">professional, casual, exciting, educational</div>
+                                    </div>
+                                    <div class="parameter-item">
+                                        <span class="parameter-name">hashtags</span>
+                                        <span class="parameter-type">boolean</span>
+                                        <div class="parameter-description">Include hashtags (default: true)</div>
+                                    </div>
+                                </div>
+
+                                <h4>Request Example</h4>
+                                <div class="code-block">
+                                    <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+                                    <pre>
+{
+  "platform": "facebook",
+  "topic": "AI agents for e-commerce",
+  "tone": "professional",
+  "hashtags": true
+}
+                                    </pre>
+                                </div>
+
+                                <h4>Response</h4>
+                                <div class="response-example">
+                                    <span class="response-status status-200">200 OK</span>
+                                    <div class="code-block">
+                                        <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+                                        <pre>
+{
+  "status": "success",
+  "post_id": "POST-20260331103045",
+  "platform": "facebook",
+  "content": "Every business deserves AI employees...",
+  "tone": "professional",
+  "created_at": "2026-03-31T10:30:45.123456Z"
+}
+                                    </pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Error Handling Section -->
+                <section id="error-handling">
+                    <h2>❌ Error Handling</h2>
+                    <p>The API uses standard HTTP status codes to indicate success or failure.</p>
+
+                    <h3>HTTP Status Codes</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Code</th>
+                                <th>Meaning</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="status-badge status-success">200</span></td>
+                                <td>OK</td>
+                                <td>Request successful</td>
+                            </tr>
+                            <tr>
+                                <td><span class="status-badge status-warning">400</span></td>
+                                <td>Bad Request</td>
+                                <td>Invalid request parameters</td>
+                            </tr>
+                            <tr>
+                                <td><span class="status-badge status-warning">401</span></td>
+                                <td>Unauthorized</td>
+                                <td>Missing or invalid authentication</td>
+                            </tr>
+                            <tr>
+                                <td><span class="status-badge status-warning">429</span></td>
+                                <td>Too Many Requests</td>
+                                <td>Rate limit exceeded</td>
+                            </tr>
+                            <tr>
+                                <td><span class="status-badge status-warning">500</span></td>
+                                <td>Server Error</td>
+                                <td>Internal server error</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>Error Response Format</h3>
+                    <div class="code-block">
+                        <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>
+{
+  "status": "error",
+  "error_code": "INVALID_REQUEST",
+  "message": "Missing required parameter: message",
+  "details": {
+    "missing_fields": ["message"]
+  }
+}
+                        </pre>
+                    </div>
+                </section>
+
+                <!-- Rate Limiting Section -->
+                <section id="rate-limiting">
+                    <h2>⏱️ Rate Limiting</h2>
+                    <p>API requests are rate limited to prevent abuse.</p>
+
+                    <h3>Rate Limits</h3>
+                    <ul>
+                        <li><strong>Standard Plan:</strong> 100 requests/minute</li>
+                        <li><strong>Professional Plan:</strong> 500 requests/minute</li>
+                        <li><strong>Enterprise Plan:</strong> Unlimited</li>
+                    </ul>
+
+                    <h3>Rate Limit Headers</h3>
+                    <div class="code-block">
+                        <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>
+X-RateLimit-Limit: 100
+X-RateLimit-Remaining: 95
+X-RateLimit-Reset: 1617216645
+                        </pre>
+                    </div>
+
+                    <div class="alert alert-warning">
+                        <strong>⚠️ Note:</strong> When rate limit is exceeded, the API returns a 429 status code.
+                    </div>
+                </section>
+
+                <!-- Webhooks Section -->
+                <section id="webhooks">
+                    <h2>🔔 Webhooks</h2>
+                    <p>Webhooks allow you to receive real-time notifications for events.</p>
+
+                    <h3>Supported Events</h3>
+                    <ul>
+                        <li><code>agent.message.received</code> - Agent received a message</li>
+                        <li><code>quote.generated</code> - Quote was generated</li>
+                        <li><code>ticket.created</code> - Support ticket created</li>
+                        <li><code>ticket.updated</code> - Support ticket updated</li>
+                        <li><code>content.published</code> - Marketing content published</li>
+                    </ul>
+
+                    <h3>Webhook Payload</h3>
+                    <div class="code-block">
+                        <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>
+{
+  "event": "agent.message.received",
+  "timestamp": "2026-03-31T10:30:45.123456Z",
+  "data": {
+    "agent_type": "sales",
+    "message": "Customer inquiry",
+    "conversation_id": "conv_789012"
+  }
+}
+                        </pre>
+                    </div>
+
+                    <h3>Setup Webhook</h3>
+                    <ol>
+                        <li>Go to Dashboard → Webhooks</li>
+                        <li>Click "Add Webhook"</li>
+                        <li>Enter webhook URL</li>
+                        <li>Select events to subscribe</li>
+                        <li>Save webhook</li>
+                    </ol>
+                </section>
+
+                <!-- Additional Resources -->
+                <section>
+                    <h2>📚 Additional Resources</h2>
+                    <ul>
+                        <li><a href="https://github.com/techspark-ai/techspark-platform" target="_blank">GitHub Repository</a></li>
+                        <li><a href="https://github.com/techspark-ai/techspark-platform/tree/main/agents-library/examples" target="_blank">Code Examples</a></li>
+                        <li><a href="https://github.com/techspark-ai/techspark-platform/blob/main/INTEGRATION_GUIDE.md" target="_blank">Integration Guide</a></li>
+                        <li><a href="https://techspark.ai/support" target="_blank">Support</a></li>
+                    </ul>
+                </section>
+            </main>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>TechSpark AI Platform - API Documentation | Last Updated: March 31, 2026</p>
+        </footer>
+    </div>
+
+    <script>
+        // Theme Toggle
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+        }
+
+        // Load saved theme
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+        }
+
+        // Toggle Endpoint
+        function toggleEndpoint(header) {
+            const endpoint = header.parentElement;
+            endpoint.classList.toggle('expanded');
+        }
+
+        // Sidebar Toggle
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('mobile-open');
+        }
+
+        // Copy Code
+        function copyCode(button) {
+            const code = button.nextElementSibling.textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                button.textContent = '✅ Copied!';
+                button.classList.add('copied');
+                setTimeout(() => {
+                    button.textContent = 'Copy';
+                    button.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        // Scroll to Section
+        function scrollTo(id) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+                document.getElementById('sidebar').classList.remove('mobile-open');
+            }
+        }
+
+        // Active Link Highlighting
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('section');
+            const links = document.querySelectorAll('.sidebar a');
+            
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            links.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
