@@ -1,0 +1,57 @@
+# GitHub Pages Configuration
+title: TechSpark AI Platform
+description: Open Source AI Agent Platform for Thai SMEs
+url: "https://techspark-ai.github.io/techspark-platform"
+baseurl: "/techspark-platform"
+
+# Theme
+theme: jekyll-theme-minimal
+remote_theme: pages-themes/minimal@v0.2.0
+
+# Plugins
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+exclude:
+  - .gitignore
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+
+# SEO
+author:
+  name: TechSpark AI
+  email: info@techspark.ai
+  twitter: techspark_ai
+
+# Social
+social:
+  links:
+    - https://github.com/techspark-ai/techspark-platform
+    - https://twitter.com/techspark_ai
+    - https://techspark.ai
+
+# Collections
+collections:
+  docs:
+    output: true
+    permalink: /:collection/:path/
+
+# Defaults
+defaults:
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "default"
+  - scope:
+      path: ""
+      type: "docs"
+    values:
+      layout: "default"
