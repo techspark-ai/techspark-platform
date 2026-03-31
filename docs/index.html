@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation - TechSpark AI Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: white;
+            padding: 60px 40px;
+            border-radius: 10px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        header h1 {
+            color: #667eea;
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: #666;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        .search-box {
+            max-width: 500px;
+            margin: 20px auto 0;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .docs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .doc-card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .doc-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .doc-card-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .doc-card h3 {
+            color: #667eea;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .doc-card p {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .doc-card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9em;
+            color: #999;
+        }
+
+        .doc-card a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-block;
+            margin-top: 15px;
+        }
+
+        .doc-card a:hover {
+            text-decoration: underline;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+
+        .badge-new {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .badge-updated {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section h2 {
+            color: white;
+            font-size: 2em;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .quick-links {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .quick-links h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .quick-links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .quick-link {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #667eea;
+            font-weight: 600;
+            transition: all 0.3s;
+            border-left: 4px solid #667eea;
+        }
+
+        .quick-link:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .faq-section {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .faq-item {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+
+        .faq-question {
+            color: #667eea;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-answer {
+            color: #666;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .faq-answer.active {
+            display: block;
+        }
+
+        footer {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            color: #666;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2em;
+            }
+
+            .docs-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 Documentation</h1>
+            <p>TechSpark AI Platform - Complete Documentation & Guides</p>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="🔍 ค้นหาเอกสาร...">
+            </div>
+        </header>
+
+        <!-- Quick Links Section -->
+        <div class="quick-links">
+            <h3>⚡ Quick Links</h3>
+            <div class="quick-links-grid">
+                <a href="./setup-guide.md" class="quick-link">🚀 Setup Guide</a>
+                <a href="./architecture.md" class="quick-link">🏗️ Architecture</a>
+                <a href="./ci-cd-guide.html" class="quick-link">🔄 CI/CD Guide</a>
+                <a href="https://github.com/techspark-ai/techspark-platform" class="quick-link">💻 GitHub</a>
+            </div>
+        </div>
+
+        <!-- Documentation Section -->
+        <div class="section">
+            <h2>📖 Documentation</h2>
+            <div class="docs-grid">
+                <!-- Setup Guide -->
+                <div class="doc-card">
+                    <div class="doc-card-icon">🚀</div>
+                    <h3>Setup Guide</h3>
+                    <p>คำแนะนำการติดตั้งและเริ่มต้นใช้งาน TechSpark Platform</p>
+                    <div class="doc-card-meta">
+                        <span>📄 Markdown</span>
+                        <span class="badge badge-new">New</span>
+                    </div>
+                    <a href="./setup-guide.md">อ่านเพิ่มเติม →</a>
+                </div>
+
+                <!-- Architecture -->
+                <div class="doc-card">
+                    <div class="doc-card-icon">🏗️</div>
+                    <h3>Architecture</h3>
+                    <p>ทำความเข้าใจสถาปัตยกรรมระบบและการออกแบบของ TechSpark</p>
+                    <div class="doc-card-meta">
+                        <span>📄 Markdown</span>
+                        <span class="badge badge-updated">Updated</span>
+                    </div>
+                    <a href="./architecture.md">อ่านเพิ่มเติม →</a>
+                </div>
+
+                <!-- CI/CD Guide -->
+                <div class="doc-card">
+                    <div class="doc-card-icon">🔄</div>
+                    <h3>CI/CD Pipeline Guide</h3>
+                    <p>คู่มือการใช้งาน GitHub Actions CI/CD Pipeline</p>
+                    <div class="doc-card-meta">
+                        <span>🌐 HTML</span>
+                        <span class="badge badge-new">New</span>
+                    </div>
+                    <a href="./ci-cd-guide.html">อ่านเพิ่มเติม →</a>
+                </div>
+
+                <!-- Prompt Engineering -->
+                <div class="doc-card">
+                    <div class="doc-card-icon">💬</div>
+                    <h3>Prompt Engineering Guide</h3>
+                    <p>เรียนรู้วิธีการเขียน Prompt ที่มีประสิทธิภาพสำหรับ AI Agents</p>
+                    <div class="doc-card-meta">
+                        <span>📄 Markdown</span>
+                    </div>
+                    <a href="../agents-library/templates/prompt-engineering-guide.md">อ่านเพิ่มเติม →</a>
+                </div>
+
+                <!-- API Reference -->
+                <div class="doc-card">
+                    <div class="doc-card-icon">🔌</div>
+                    <h3>API Reference</h3>
+                    <p>รายละเอียด API และ Endpoints สำหรับ TechSpark Platform</p>
+                    <div class="doc-card-meta">
+                        <span>📄 Markdown</span>
+                    </div>
+                    <a href="./api-reference.md">อ่านเพิ่มเติม →</a>
+                </div>
+
+                <!-- Contributing -->
+                <div class="doc-card">
+                    <div class="doc-card-icon">🤝</div>
+                    <h3>Contributing Guide</h3>
+                    <p>วิธีการมีส่วนร่วมในการพัฒนา TechSpark Platform</p>
+                    <div class="doc-card-meta">
+                        <span>📄 Markdown</span>
+                    </div>
+                    <a href="../CONTRIBUTING.md">อ่านเพิ่มเติม →</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Agents Section -->
+        <div class="section">
+            <h2>🤖 AI Agents Documentation</h2>
+            <div class="docs-grid">
+                <!-- Sales Agent -->
+                <div class="doc-card">
+                    <div class="doc-card-icon">💼</div>
+                    <h3>Sales Agent</h3>
+                    <p>ตัวแทนขายที่ตอบคำถามและสร้างใบเสนอราคา</p>
+                    <div class="doc-card-meta">
+                        <span>📄 README</span>
+                    </div>
+                    <a href="../agents-library/sales-agent/README.md">อ่านเพิ่มเติม →</a>
+                </div>
+
+                <!-- Support Agent -->
+                <div class="doc-card">
+                    <div class="doc-card-icon">🎧</div>
+                    <h3>Support Agent</h3>
+                    <p>ตัวแทนบริการลูกค้า 24/7 พร้อม FAQ และ Ticketing</p>
+                    <div class="doc-card-meta">
+                        <span>📄 README</span>
+                    </div>
+                    <a href="../agents-library/support-agent/README.md">อ่านเพิ่มเติม →</a>
+                </div>
+
+                <!-- Marketing Agent -->
+                <div class="doc-card">
+                    <div class="doc-card-icon">📱</div>
+                    <h3>Marketing Agent</h3>
+                    <p>ตัวแทนการตลาดสำหรับสร้างเนื้อหา Social Media</p>
+                    <div class="doc-card-meta">
+                        <span>📄 README</span>
+                    </div>
+                    <a href="../agents-library/marketing-agent/README.md">อ่านเพิ่มเติม →</a>
+                </div>
+
+                <!-- HR Agent -->
+                <div class="doc-card">
+                    <div class="doc-card-icon">👥</div>
+                    <h3>HR Agent</h3>
+                    <p>ตัวแทน HR สำหรับจัดการพนักงานและ Leave Request</p>
+                    <div class="doc-card-meta">
+                        <span>📄 README</span>
+                    </div>
+                    <a href="../agents-library/hr-agent/README.md">อ่านเพิ่มเติม →</a>
+                </div>
+
+                <!-- Finance Agent -->
+                <div class="doc-card">
+                    <div class="doc-card-icon">💰</div>
+                    <h3>Finance Agent</h3>
+                    <p>ตัวแทนการเงินสำหรับวิเคราะห์และรายงาน</p>
+                    <div class="doc-card-meta">
+                        <span>📄 README</span>
+                    </div>
+                    <a href="../agents-library/finance-agent/README.md">อ่านเพิ่มเติม →</a>
+                </div>
+
+                <!-- Base Template -->
+                <div class="doc-card">
+                    <div class="doc-card-icon">🎯</div>
+                    <h3>Base Agent Template</h3>
+                    <p>Template สำหรับสร้าง Custom AI Agents</p>
+                    <div class="doc-card-meta">
+                        <span>📄 JSON</span>
+                    </div>
+                    <a href="../agents-library/templates/base-agent-template.json">อ่านเพิ่มเติม →</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="section">
+            <h2>❓ Frequently Asked Questions</h2>
+            <div class="faq-section">
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>TechSpark Platform คืออะไร?</span>
+                        <span>▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>TechSpark Platform เป็น Open Source AI Agent Marketplace ที่ช่วยให้ SME ไทยสามารถใช้ AI ได้ง่ายๆ โดยไม่ต้องมีทีม Tech</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>ฉันจะเริ่มต้นใช้งานได้ยังไง?</span>
+                        <span>▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>ดูที่ <a href="./setup-guide.md">Setup Guide</a> สำหรับคำแนะนำการติดตั้งและเริ่มต้นใช้งาน</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>ฉันสามารถสร้าง Custom Agent ได้ไหม?</span>
+                        <span>▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>ได้ค่ะ! ใช้ <a href="../agents-library/templates/base-agent-template.json">Base Agent Template</a> และ <a href="../agents-library/templates/prompt-engineering-guide.md">Prompt Engineering Guide</a></p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>CI/CD Pipeline ทำงานอย่างไร?</span>
+                        <span>▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>ดูที่ <a href="./ci-cd-guide.html">CI/CD Pipeline Guide</a> สำหรับรายละเอียดเกี่ยวกับ GitHub Actions Workflows</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>ฉันสามารถมีส่วนร่วมในการพัฒนาได้ไหม?</span>
+                        <span>▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>ได้ค่ะ! ดูที่ <a href="../CONTRIBUTING.md">Contributing Guide</a> สำหรับวิธีการมีส่วนร่วม</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resources Section -->
+        <div class="section">
+            <h2>🔗 Resources</h2>
+            <div class="quick-links">
+                <div class="quick-links-grid">
+                    <a href="https://github.com/techspark-ai/techspark-platform" class="quick-link">💻 GitHub Repository</a>
+                    <a href="https://github.com/techspark-ai/techspark-platform/issues" class="quick-link">🐛 Report Issues</a>
+                    <a href="https://github.com/techspark-ai/techspark-platform/discussions" class="quick-link">💬 Discussions</a>
+                    <a href="https://github.com/techspark-ai/techspark-platform/wiki" class="quick-link">📖 Wiki</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="button-group">
+            <a href="https://github.com/techspark-ai/techspark-platform" class="btn btn-primary">View on GitHub</a>
+            <a href="./setup-guide.md" class="btn btn-secondary">Get Started</a>
+        </div>
+
+        <footer>
+            <p>Made with ❤️ by <strong>TechSpark AI</strong></p>
+            <p>© 2026 TechSpark AI. All rights reserved. | <a href="https://github.com/techspark-ai/techspark-platform/blob/main/LICENSE" target="_blank">MIT License</a></p>
+        </footer>
+    </div>
+
+    <script>
+        function toggleFAQ(element) {
+            const answer = element.nextElementSibling;
+            answer.classList.toggle('active');
+        }
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const cards = document.querySelectorAll('.doc-card');
+            
+            cards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

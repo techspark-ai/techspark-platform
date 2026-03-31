@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CI/CD Pipeline Guide - TechSpark AI Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: white;
+            padding: 40px 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .breadcrumb {
+            margin-top: 15px;
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        .breadcrumb a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .sidebar {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            height: fit-content;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 20px;
+        }
+
+        .sidebar h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar a {
+            color: #666;
+            text-decoration: none;
+            display: block;
+            padding: 8px 12px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar a:hover {
+            background: #f0f0f0;
+            color: #667eea;
+            padding-left: 16px;
+        }
+
+        .main-content {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .section h3 {
+            color: #764ba2;
+            font-size: 1.5em;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        .section h4 {
+            color: #666;
+            font-size: 1.2em;
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+
+        .workflow-card {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .workflow-card h4 {
+            color: #667eea;
+            margin-top: 0;
+        }
+
+        .workflow-card ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .workflow-card li {
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        table th {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        table td {
+            border-bottom: 1px solid #ddd;
+            padding: 12px;
+        }
+
+        table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .badge-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .badge-info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .badge-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .checklist {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+
+        .checklist ul {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .checklist li {
+            padding: 8px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .checklist li:before {
+            content: "☐";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .flow-diagram {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+            font-family: monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            color: #555;
+            border-left: 4px solid #667eea;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            border-color: #0c5460;
+            color: #0c5460;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            border-color: #856404;
+            color: #856404;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            border-color: #155724;
+            color: #155724;
+        }
+
+        .alert-danger {
+            background: #f8d7da;
+            border-color: #721c24;
+            color: #721c24;
+        }
+
+        footer {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            color: #666;
+            margin-top: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .toc {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+
+        .toc h3 {
+            margin-top: 0;
+        }
+
+        .toc ol {
+            margin-left: 20px;
+        }
+
+        .toc li {
+            margin-bottom: 8px;
+        }
+
+        .toc a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .toc a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: static;
+            }
+
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .main-content {
+                padding: 20px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 CI/CD Pipeline Guide</h1>
+            <p>คู่มือการใช้งาน GitHub Actions CI/CD Pipeline สำหรับ TechSpark Platform</p>
+            <div class="breadcrumb">
+                <a href="/">Home</a> / <a href="/docs">Documentation</a> / CI/CD Guide
+            </div>
+        </header>
+
+        <div class="content">
+            <aside class="sidebar">
+                <h3>📋 เนื้อหา</h3>
+                <ul>
+                    <li><a href="#overview">Overview</a></li>
+                    <li><a href="#workflows">Workflows</a></li>
+                    <li><a href="#setup">Setup</a></li>
+                    <li><a href="#secrets">Secrets</a></li>
+                    <li><a href="#monitoring">Monitoring</a></li>
+                    <li><a href="#troubleshooting">Troubleshooting</a></li>
+                    <li><a href="#resources">Resources</a></li>
+                </ul>
+            </aside>
+
+            <main class="main-content">
+                <!-- Overview Section -->
+                <section class="section" id="overview">
+                    <h2>🎯 Overview</h2>
+                    <p>TechSpark Platform ใช้ GitHub Actions สำหรับ Continuous Integration/Continuous Deployment (CI/CD)</p>
+
+                    <h3>✨ Features</h3>
+                    <div class="workflow-card">
+                        <ul>
+                            <li><span class="badge badge-success">✅</span> Automated Testing</li>
+                            <li><span class="badge badge-success">✅</span> Code Quality Checks</li>
+                            <li><span class="badge badge-success">✅</span> Security Scanning</li>
+                            <li><span class="badge badge-success">✅</span> Automated Deployment</li>
+                            <li><span class="badge badge-success">✅</span> Release Management</li>
+                            <li><span class="badge badge-success">✅</span> Documentation Publishing</li>
+                        </ul>
+                    </div>
+
+                    <h3>🔄 Pipeline Flow</h3>
+                    <div class="flow-diagram">Push Code
+    ↓
+├─ Lint & Test
+│  ├─ ESLint
+│  ├─ TypeScript Check
+│  ├─ Unit Tests
+│  └─ Build
+├─ Code Quality
+│  ├─ SonarQube
+│  ├─ Dependency Check
+│  └─ License Check
+├─ Security
+│  ├─ Vulnerability Scan
+│  └─ SBOM Generation
+└─ Deploy (if main branch)
+   ├─ Build Frontend
+   ├─ Deploy to Vercel
+   └─ Create Release</div>
+                </section>
+
+                <!-- Workflows Section -->
+                <section class="section" id="workflows">
+                    <h2>🔄 Workflows</h2>
+
+                    <h3>1. Lint & Test</h3>
+                    <div class="workflow-card">
+                        <h4>lint-and-test.yml</h4>
+                        <p><strong>Trigger:</strong> Push to main/develop, Pull Request</p>
+                        <p><strong>Jobs:</strong></p>
+                        <ul>
+                            <li><strong>lint</strong> - ESLint, TypeScript, Prettier</li>
+                            <li><strong>test</strong> - Unit tests, Coverage</li>
+                            <li><strong>build</strong> - Build artifacts</li>
+                            <li><strong>security</strong> - Vulnerability scanning</li>
+                            <li><strong>documentation</strong> - Documentation validation</li>
+                        </ul>
+                    </div>
+
+                    <h3>2. Deploy</h3>
+                    <div class="workflow-card">
+                        <h4>deploy.yml</h4>
+                        <p><strong>Trigger:</strong> Push to main, Manual trigger</p>
+                        <p><strong>Jobs:</strong></p>
+                        <ul>
+                            <li>Build Frontend</li>
+                            <li>Deploy to Vercel</li>
+                            <li>Create GitHub Release</li>
+                            <li>Notify Slack</li>
+                        </ul>
+                    </div>
+
+                    <h3>3. Code Quality</h3>
+                    <div class="workflow-card">
+                        <h4>code-quality.yml</h4>
+                        <p><strong>Trigger:</strong> Push to main/develop, Pull Request</p>
+                        <p><strong>Jobs:</strong></p>
+                        <ul>
+                            <li>SonarQube Analysis</li>
+                            <li>Dependency Check</li>
+                            <li>License Verification</li>
+                            <li>Performance Analysis</li>
+                            <li>Accessibility Check</li>
+                        </ul>
+                    </div>
+
+                    <h3>4. Release</h3>
+                    <div class="workflow-card">
+                        <h4>release.yml</h4>
+                        <p><strong>Trigger:</strong> Push tag (v*), Manual trigger</p>
+                        <p><strong>Jobs:</strong></p>
+                        <ul>
+                            <li>Create Release Notes</li>
+                            <li>Publish Release</li>
+                            <li>Update CHANGELOG</li>
+                            <li>Deploy Documentation</li>
+                            <li>Announce Release</li>
+                        </ul>
+                    </div>
+
+                    <h3>5. PR Checks</h3>
+                    <div class="workflow-card">
+                        <h4>pr-checks.yml</h4>
+                        <p><strong>Trigger:</strong> Pull Request</p>
+                        <p><strong>Jobs:</strong></p>
+                        <ul>
+                            <li>PR Title Validation</li>
+                            <li>PR Description Check</li>
+                            <li>File Changes Check</li>
+                            <li>Commit Lint</li>
+                            <li>Dependency Check</li>
+                            <li>Code Review Hints</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Setup Section -->
+                <section class="section" id="setup">
+                    <h2>🚀 Setup Instructions</h2>
+
+                    <h3>Step 1: Enable GitHub Actions</h3>
+                    <ol>
+                        <li>Go to Repository Settings</li>
+                        <li>Click "Actions" → "General"</li>
+                        <li>Enable "Allow all actions and reusable workflows"</li>
+                    </ol>
+
+                    <h3>Step 2: Configure Secrets</h3>
+                    <p>Add the following secrets to GitHub:</p>
+                    <p><strong>Settings → Secrets and variables → Actions</strong></p>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Secret Name</th>
+                                <th>Description</th>
+                                <th>Required</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>VERCEL_TOKEN</td>
+                                <td>Vercel deployment token</td>
+                                <td><span class="badge badge-danger">Yes</span></td>
+                            </tr>
+                            <tr>
+                                <td>VERCEL_ORG_ID</td>
+                                <td>Vercel organization ID</td>
+                                <td><span class="badge badge-danger">Yes</span></td>
+                            </tr>
+                            <tr>
+                                <td>VERCEL_PROJECT_ID</td>
+                                <td>Vercel project ID</td>
+                                <td><span class="badge badge-danger">Yes</span></td>
+                            </tr>
+                            <tr>
+                                <td>SLACK_WEBHOOK</td>
+                                <td>Slack webhook URL</td>
+                                <td><span class="badge badge-warning">Optional</span></td>
+                            </tr>
+                            <tr>
+                                <td>SONAR_TOKEN</td>
+                                <td>SonarQube token</td>
+                                <td><span class="badge badge-warning">Optional</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>Step 3: Configure Branch Protection</h3>
+                    <ol>
+                        <li>Go to Repository Settings</li>
+                        <li>Click "Branches"</li>
+                        <li>Add rule for "main":
+                            <ul>
+                                <li>✅ Require status checks to pass</li>
+                                <li>✅ Require branches to be up to date</li>
+                                <li>✅ Dismiss stale reviews</li>
+                            </ul>
+                        </li>
+                    </ol>
+
+                    <h3>Setup Checklist</h3>
+                    <div class="checklist">
+                        <ul>
+                            <li>Add Secrets to GitHub (VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID)</li>
+                            <li>Configure Branch Protection</li>
+                            <li>Setup Vercel Integration</li>
+                            <li>Test Workflows</li>
+                            <li>Monitor Workflows</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Secrets Section -->
+                <section class="section" id="secrets">
+                    <h2>🔐 Secrets Management</h2>
+
+                    <h3>Adding Secrets</h3>
+                    <div class="code-block">
+# Using GitHub CLI
+gh secret set SECRET_NAME --body "secret_value"
+
+# Or via GitHub UI
+Settings → Secrets and variables → Actions → New repository secret</div>
+
+                    <h3>Using Secrets in Workflows</h3>
+                    <div class="code-block">env:
+  API_KEY: ${{ secrets.API_KEY }}</div>
+
+                    <h3>Secret Best Practices</h3>
+                    <div class="alert alert-info">
+                        <strong>💡 Best Practices:</strong>
+                        <ul>
+                            <li>✅ Never commit secrets</li>
+                            <li>✅ Use GitHub Secrets</li>
+                            <li>✅ Rotate secrets regularly</li>
+                            <li>✅ Use minimal permissions</li>
+                            <li>✅ Audit secret access</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Monitoring Section -->
+                <section class="section" id="monitoring">
+                    <h2>📊 Monitoring</h2>
+
+                    <h3>View Workflow Status</h3>
+                    <ol>
+                        <li>Go to Repository</li>
+                        <li>Click "Actions" tab</li>
+                        <li>View workflow runs</li>
+                    </ol>
+
+                    <h3>Status Badges</h3>
+                    <p>Add to README:</p>
+                    <div class="code-block">![Lint & Test](https://github.com/techspark-ai/techspark-platform/workflows/Lint%20&%20Test/badge.svg)
+![Deploy](https://github.com/techspark-ai/techspark-platform/workflows/Deploy/badge.svg)
+![Code Quality](https://github.com/techspark-ai/techspark-platform/workflows/Code%20Quality/badge.svg)</div>
+
+                    <h3>Notifications</h3>
+                    <ul>
+                        <li>Email notifications (default)</li>
+                        <li>Slack notifications (optional)</li>
+                        <li>Custom webhooks</li>
+                    </ul>
+                </section>
+
+                <!-- Troubleshooting Section -->
+                <section class="section" id="troubleshooting">
+                    <h2>🐛 Troubleshooting</h2>
+
+                    <h3>Common Issues</h3>
+
+                    <h4>1. Build Fails</h4>
+                    <div class="alert alert-warning">
+                        <strong>Solution:</strong>
+                        <ul>
+                            <li>Check logs in Actions tab</li>
+                            <li>Common causes: Missing dependencies, Environment variables not set, Node version mismatch</li>
+                        </ul>
+                    </div>
+
+                    <h4>2. Deployment Fails</h4>
+                    <div class="alert alert-warning">
+                        <strong>Solution:</strong>
+                        <ul>
+                            <li>Check Vercel logs</li>
+                            <li>Verify secrets are set correctly</li>
+                            <li>Check branch protection rules</li>
+                        </ul>
+                    </div>
+
+                    <h4>3. Tests Fail</h4>
+                    <div class="alert alert-warning">
+                        <strong>Solution:</strong>
+                        <ul>
+                            <li>Run tests locally: <code>npm run test</code></li>
+                            <li>Check test configuration</li>
+                            <li>Review test output in GitHub Actions</li>
+                        </ul>
+                    </div>
+
+                    <h3>Debug Mode</h3>
+                    <p>Enable debug logging:</p>
+                    <div class="code-block">env:
+  ACTIONS_STEP_DEBUG: true</div>
+                </section>
+
+                <!-- Resources Section -->
+                <section class="section" id="resources">
+                    <h2>📚 Resources</h2>
+
+                    <h3>Official Documentation</h3>
+                    <ul>
+                        <li><a href="https://docs.github.com/en/actions" target="_blank">GitHub Actions Documentation</a></li>
+                        <li><a href="https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions" target="_blank">Workflow Syntax</a></li>
+                        <li><a href="https://github.com/marketplace?type=actions" target="_blank">Actions Marketplace</a></li>
+                    </ul>
+
+                    <h3>Related Guides</h3>
+                    <ul>
+                        <li><a href="./setup-guide.md">Setup Guide</a></li>
+                        <li><a href="./architecture.md">Architecture</a></li>
+                        <li><a href="./prompt-engineering-guide.md">Prompt Engineering Guide</a></li>
+                    </ul>
+
+                    <h3>Support</h3>
+                    <ul>
+                        <li>📧 Email: support@techspark.ai</li>
+                        <li>💬 Discord: <a href="https://discord.gg/techspark" target="_blank">Join Community</a></li>
+                        <li>🐛 Issues: <a href="https://github.com/techspark-ai/techspark-platform/issues" target="_blank">GitHub Issues</a></li>
+                    </ul>
+                </section>
+
+                <div class="button-group">
+                    <a href="https://github.com/techspark-ai/techspark-platform" class="btn btn-primary">View on GitHub</a>
+                    <a href="./setup-guide.md" class="btn btn-secondary">Setup Guide</a>
+                    <a href="/" class="btn btn-secondary">Back to Home</a>
+                </div>
+            </main>
+        </div>
+
+        <footer>
+            <p>Made with ❤️ by <strong>TechSpark AI</strong></p>
+            <p>© 2026 TechSpark AI. All rights reserved. | <a href="https://github.com/techspark-ai/techspark-platform/blob/main/LICENSE" target="_blank">MIT License</a></p>
+        </footer>
+    </div>
+
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Highlight current section in sidebar
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('.section');
+            const sidebarLinks = document.querySelectorAll('.sidebar a');
+
+            sections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                if (rect.top <= 100 && rect.bottom >= 100) {
+                    sidebarLinks.forEach(link => link.style.color = '#666');
+                    const activeLink = document.querySelector(`.sidebar a[href="#${section.id}"]`);
+                    if (activeLink) {
+                        activeLink.style.color = '#667eea';
+                        activeLink.style.fontWeight = '600';
+                    }
+                }
+            });
+        });
+
+        // Copy code block on click
+        document.querySelectorAll('.code-block').forEach(block => {
+            block.style.cursor = 'pointer';
+            block.title = 'Click to copy';
+            block.addEventListener('click', () => {
+                const text = block.textContent;
+                navigator.clipboard.writeText(text).then(() => {
+                    const originalText = block.textContent;
+                    block.textContent = '✅ Copied!';
+                    setTimeout(() => {
+                        block.textContent = originalText;
+                    }, 2000);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
