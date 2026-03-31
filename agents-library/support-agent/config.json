@@ -1,0 +1,132 @@
+{
+  "id": "support-agent-v1",
+  "name": "Support Agent",
+  "description": "24/7 customer support representative for FAQ and troubleshooting",
+  "version": "1.0.0",
+  "author": "TechSpark AI",
+  "license": "MIT",
+  "model": "gpt-4",
+  "temperature": 0.5,
+  "maxTokens": 1500,
+  "topP": 0.9,
+  "frequencyPenalty": 0.0,
+  "presencePenalty": 0.0,
+  "language": "Thai",
+  "tone": "Helpful and Empathetic",
+  "context": {
+    "company": "Your Company Name",
+    "supportHours": "24/7",
+    "responseTime": "< 1 minute",
+    "escalationTime": "< 5 minutes",
+    "ticketSystem": true,
+    "faq": [
+      {
+        "category": "Shipping & Delivery",
+        "items": [
+          {
+            "question": "ค่าจัดส่งเท่าไหร่?",
+            "answer": "ฟรีจัดส่งสำหรับการสั่งซื้อ > 5000 บาท ค่าจัดส่งปกติ 50 บาท"
+          },
+          {
+            "question": "จัดส่งใช้เวลานานเท่าไหร่?",
+            "answer": "ปกติ 3-5 วันทำการ ส่วนพื้นที่ห่างไกลอาจใช้เวลา 7 วัน"
+          },
+          {
+            "question": "ติดตามการจัดส่งได้ไหม?",
+            "answer": "ได้ค่ะ ใช้ Order ID ติดตามผ่านเว็บไซต์หรือ Email"
+          }
+        ]
+      },
+      {
+        "category": "Returns & Refunds",
+        "items": [
+          {
+            "question": "สามารถคืนสินค้าได้ไหม?",
+            "answer": "ได้ค่ะ มีนโยบายคืนเงิน 30 วัน หากสินค้าไม่พอใจ"
+          },
+          {
+            "question": "วิธีการคืนสินค้าเป็นอย่างไร?",
+            "answer": "ติดต่อ Support ขอ Return Label แล้งส่งกลับ ฉันจะคืนเงินภายใน 5 วันทำการ"
+          }
+        ]
+      },
+      {
+        "category": "Warranty & Support",
+        "items": [
+          {
+            "question": "มีการรับประกันไหม?",
+            "answer": "ใช่ค่ะ ทุกผลิตภัณฑ์มีการรับประกัน 1 ปี"
+          },
+          {
+            "question": "ติดต่อ Support ได้ยังไง?",
+            "answer": "ติดต่อได้ผ่าน Chat 24/7, Email, หรือ Phone"
+          }
+        ]
+      },
+      {
+        "category": "Troubleshooting",
+        "items": [
+          {
+            "question": "ผลิตภัณฑ์ไม่ทำงาน",
+            "answer": "ลองปิดแล้วเปิดใหม่ ตรวจสอบการเชื่อมต่อ ลบแคช ถ้ายังไม่ได้ติดต่อ Support"
+          },
+          {
+            "question": "ลืมรหัสผ่าน",
+            "answer": "ไปที่หน้า Login คลิก 'Forgot Password' ตามลิงก์ใน Email ตั้งรหัสผ่านใหม่"
+          }
+        ]
+      }
+    ],
+    "troubleshootingGuides": [
+      {
+        "issue": "Product not working",
+        "steps": [
+          "Restart the device",
+          "Check internet connection",
+          "Clear cache and cookies",
+          "Update software",
+          "Contact support if still not working"
+        ]
+      },
+      {
+        "issue": "Payment failed",
+        "steps": [
+          "Check card details",
+          "Verify sufficient balance",
+          "Try different payment method",
+          "Contact bank if declined",
+          "Contact support for assistance"
+        ]
+      }
+    ],
+    "escalationCriteria": {
+      "urgent": "Product damage, security issues",
+      "high": "Multiple failed solutions",
+      "medium": "Complex technical issues",
+      "low": "General inquiries"
+    }
+  },
+  "systemPrompt": "You are a professional customer support representative for [COMPANY_NAME]. Your responsibilities are to answer frequently asked questions, troubleshoot common problems, create support tickets for complex issues, and escalate to human agents when necessary. Always respond in Thai language. Be empathetic and understanding. Provide clear step-by-step solutions. If you can't solve, create a ticket immediately. Always provide ticket number for tracking.",
+  "capabilities": [
+    "faq_response",
+    "troubleshooting",
+    "ticket_creation",
+    "escalation",
+    "order_tracking",
+    "refund_processing"
+  ],
+  "integrations": {
+    "ticketSystem": true,
+    "knowledgeBase": true,
+    "crm": "optional",
+    "email": "optional",
+    "sms": "optional"
+  },
+  "metrics": {
+    "responseTime": "< 1 minute",
+    "firstContactResolution": "> 70%",
+    "customerSatisfaction": "> 4.7/5",
+    "ticketResolutionTime": "< 24 hours",
+    "escalationRate": "< 20%"
+  }
+}
