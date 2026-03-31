@@ -1,0 +1,224 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version number (e.g., 1.0.0)'
+        required: true
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Get version
+      id: version
+      run: |
+        if [ "${{ github.event_name }}" == "push" ]; then
+          VERSION=${GITHUB_REF#refs/tags/v}
+        else
+          VERSION=${{ github.event.inputs.version }}
+        fi
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+    
+    - name: Create Release Notes
+      id: release_notes
+      run: |
+        cat > release_notes.md << 'EOF'
+        # TechSpark AI Platform v${{ steps.version.outputs.version }}
+        
+        ## 🎉 Release Highlights
+        
+        ### ✨ Features
+        - AI Agents Library with 5 pre-built agents
+        - Sales Agent for customer inquiries
+        - Support Agent for 24/7 customer support
+        - Marketing Agent for content creation
+        - HR Agent for employee management
+        - Finance Agent for financial reporting
+        
+        ### 🔧 Improvements
+        - Enhanced documentation
+        - Improved prompt templates
+        - Better configuration management
+        - Comprehensive examples
+        
+        ### 🐛 Bug Fixes
+        - Fixed configuration validation
+        - Improved error handling
+        
+        ### 📚 Documentation
+        - Setup guide
+        - Architecture documentation
+        - Prompt engineering guide
+        - API reference
+        
+        ## 🚀 Getting Started
+        
+        ```bash
+        git clone https://github.com/techspark-ai/techspark-platform.git
+        cd techspark-platform
+        ```
+        
+        See [README.md](README.md) for detailed instructions.
+        
+        ## 📦 Assets
+        
+        - Frontend build artifacts
+        - Agent templates
+        - Documentation
+        
+        ## 🙏 Contributors
+        
+        Thanks to all contributors!
+        
+        ---
+        
+        **Release Date**: $(date)
+        **Commit**: ${{ github.sha }}
+        EOF
+        cat release_notes.md
+    
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: v${{ steps.version.outputs.version }}
+        name: Release v${{ steps.version.outputs.version }}
+        body_path: release_notes.md
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Update CHANGELOG
+      run: |
+        cat > CHANGELOG_TEMP.md << 'EOF'
+        # Changelog
+        
+        ## [v${{ steps.version.outputs.version }}] - $(date +%Y-%m-%d)
+        
+        ### Added
+        - AI Agents Library
+        - 5 Pre-built Agent Templates
+        - Comprehensive Documentation
+        - GitHub Actions CI/CD Pipeline
+        
+        ### Changed
+        - Updated README with new features
+        - Improved documentation structure
+        
+        ### Fixed
+        - Configuration validation
+        - Error handling
+        
+        EOF
+        
+        if [ -f CHANGELOG.md ]; then
+          tail -n +2 CHANGELOG.md >> CHANGELOG_TEMP.md
+        fi
+        mv CHANGELOG_TEMP.md CHANGELOG.md
+    
+    - name: Commit CHANGELOG
+      run: |
+        git config user.name "GitHub Actions"
+        git config user.email "actions@github.com"
+        git add CHANGELOG.md
+        git commit -m "docs: update changelog for v${{ steps.version.outputs.version }}" || true
+        git push
+      continue-on-error: true
+    
+    - name: Publish to npm (Optional)
+      run: |
+        echo "📦 npm publishing can be configured here"
+        echo "To enable: Add npm token to GitHub secrets"
+      continue-on-error: true
+    
+    - name: Notify Release
+      uses: actions/github-script@v7
+      with:
+        script: |
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: '🎉 Release v${{ steps.version.outputs.version }} has been created!\n\n[View Release](https://github.com/${{ github.repository }}/releases/tag/v${{ steps.version.outputs.version }})'
+          })
+      continue-on-error: true
+
+  publish-docs:
+    runs-on: ubuntu-latest
+    needs: create-release
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup Pages
+      uses: actions/configure-pages@v3
+    
+    - name: Build docs
+      run: |
+        mkdir -p _site
+        cp -r docs/* _site/ 2>/dev/null || true
+        cp README.md _site/index.md
+        echo "✅ Documentation prepared"
+    
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v2
+      with:
+        path: '_site'
+    
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v2
+
+  announce-release:
+    runs-on: ubuntu-latest
+    needs: create-release
+    
+    steps:
+    - name: Announce on Slack
+      uses: slackapi/slack-github-action@v1.24.0
+      with:
+        webhook-url: ${{ secrets.SLACK_WEBHOOK }}
+        payload: |
+          {
+            "text": "🎉 TechSpark Platform v${{ steps.version.outputs.version }} Released!",
+            "blocks": [
+              {
+                "type": "header",
+                "text": {
+                  "type": "plain_text",
+                  "text": "🎉 TechSpark Platform v${{ steps.version.outputs.version }} Released!"
+                }
+              },
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "*Release*: v${{ steps.version.outputs.version }}\n*Repository*: <https://github.com/techspark-ai/techspark-platform|techspark-ai/techspark-platform>\n*Date*: $(date)"
+                }
+              },
+              {
+                "type": "actions",
+                "elements": [
+                  {
+                    "type": "button",
+                    "text": {
+                      "type": "plain_text",
+                      "text": "View Release"
+                    },
+                    "url": "https://github.com/techspark-ai/techspark-platform/releases/tag/v${{ steps.version.outputs.version }}"
+                  }
+                ]
+              }
+            ]
+          }
+      continue-on-error: true

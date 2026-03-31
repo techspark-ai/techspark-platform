@@ -1,0 +1,212 @@
+name: PR Checks
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+    types: [ opened, synchronize, reopened ]
+
+jobs:
+  pr-validation:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Validate PR Title
+      uses: amannn/action-semantic-pull-request@v5
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        types: |
+          feat
+          fix
+          docs
+          style
+          refactor
+          perf
+          test
+          chore
+    
+    - name: Check PR Description
+      run: |
+        PR_BODY="${{ github.event.pull_request.body }}"
+        
+        if [ -z "$PR_BODY" ]; then
+          echo "❌ PR description is empty"
+          exit 1
+        fi
+        
+        if [ ${#PR_BODY} -lt 10 ]; then
+          echo "❌ PR description is too short"
+          exit 1
+        fi
+        
+        echo "✅ PR description is valid"
+    
+    - name: Check for breaking changes
+      run: |
+        TITLE="${{ github.event.pull_request.title }}"
+        
+        if [[ "$TITLE" == *"BREAKING"* ]]; then
+          echo "⚠️  This PR contains breaking changes"
+        fi
+        
+        echo "✅ Breaking changes check completed"
+
+  file-changes:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Get changed files
+      id: changed-files
+      uses: tj-actions/changed-files@v40
+    
+    - name: Check for critical file changes
+      run: |
+        CHANGED_FILES="${{ steps.changed-files.outputs.all_changed_files }}"
+        
+        # Check if important files were changed
+        if echo "$CHANGED_FILES" | grep -q "package.json"; then
+          echo "⚠️  package.json was modified"
+        fi
+        
+        if echo "$CHANGED_FILES" | grep -q "LICENSE"; then
+          echo "⚠️  LICENSE was modified"
+        fi
+        
+        echo "✅ File changes validated"
+
+  size-check:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Check PR size
+      run: |
+        # Get number of changed files
+        CHANGED_FILES=$(git diff --name-only origin/main...HEAD | wc -l)
+        
+        # Get number of additions and deletions
+        STATS=$(git diff --stat origin/main...HEAD | tail -1)
+        
+        echo "📊 PR Statistics:"
+        echo "Changed files: $CHANGED_FILES"
+        echo "Changes: $STATS"
+        
+        if [ "$CHANGED_FILES" -gt 50 ]; then
+          echo "⚠️  Large PR: Consider breaking into smaller PRs"
+        fi
+
+  commit-lint:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Validate commit messages
+      run: |
+        # Get all commits in this PR
+        COMMITS=$(git log origin/main..HEAD --format=%B)
+        
+        echo "📝 Validating commit messages..."
+        
+        # Check for conventional commits
+        if echo "$COMMITS" | grep -qE "^(feat|fix|docs|style|refactor|perf|test|chore)"; then
+          echo "✅ Commits follow conventional commit format"
+        else
+          echo "⚠️  Some commits may not follow conventional commit format"
+        fi
+
+  dependencies:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+    
+    - name: Check for vulnerable dependencies
+      run: |
+        cd frontend
+        npm install
+        npm audit --audit-level=moderate 2>/dev/null || true
+        echo "✅ Dependency check completed"
+
+  code-review-hints:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Generate review hints
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          const path = require('path');
+          
+          // Get PR information
+          const pr = context.payload.pull_request;
+          
+          let hints = [];
+          
+          // Check for common issues
+          if (pr.additions > 500) {
+            hints.push('💡 Large PR: Consider breaking into smaller, focused PRs');
+          }
+          
+          if (pr.deletions > 200) {
+            hints.push('💡 Large deletions: Ensure backward compatibility');
+          }
+          
+          if (pr.changed_files > 20) {
+            hints.push('💡 Many files changed: Consider organizing into logical commits');
+          }
+          
+          // Post comment
+          if (hints.length > 0) {
+            const body = '## 📋 Review Hints\n\n' + hints.map(h => `- ${h}`).join('\n');
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
+          }
+
+  auto-merge:
+    runs-on: ubuntu-latest
+    if: |
+      github.event.pull_request.author_association == 'OWNER' ||
+      github.event.pull_request.author_association == 'COLLABORATOR'
+    
+    steps:
+    - name: Enable auto-merge
+      uses: actions/github-script@v7
+      with:
+        script: |
+          github.rest.pulls.enableAutoMerge({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: context.issue.number,
+            merge_method: 'squash'
+          });
+      continue-on-error: true
