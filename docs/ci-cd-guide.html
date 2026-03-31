@@ -52,6 +52,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
         }
 
         body.dark-mode header {
@@ -82,9 +84,10 @@
             display: flex;
             gap: 15px;
             align-items: center;
+            flex-wrap: wrap;
         }
 
-        .theme-toggle, .toc-toggle {
+        .theme-toggle, .toc-toggle, .copy-btn, .expand-all-btn {
             background: var(--primary);
             color: white;
             border: none;
@@ -95,32 +98,38 @@
             transition: all 0.3s;
         }
 
-        .theme-toggle:hover, .toc-toggle:hover {
+        .theme-toggle:hover, .toc-toggle:hover, .copy-btn:hover, .expand-all-btn:hover {
             background: var(--secondary);
             transform: translateY(-2px);
-        }
-
-        .breadcrumb {
-            margin-top: 15px;
-            color: #999;
-            font-size: 0.9em;
-        }
-
-        .breadcrumb a {
-            color: var(--primary);
-            text-decoration: none;
-        }
-
-        .breadcrumb a:hover {
-            text-decoration: underline;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
         /* Main Layout */
-        .content {
+        .main-layout {
             display: grid;
-            grid-template-columns: 280px 1fr;
-            gap: 30px;
-            margin-bottom: 30px;
+            grid-template-columns: 250px 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+            
+            .sidebar.mobile-open {
+                display: block;
+                position: fixed;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 999;
+            }
         }
 
         /* Sidebar */
@@ -129,11 +138,9 @@
             padding: 20px;
             border-radius: 10px;
             height: fit-content;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             position: sticky;
             top: 20px;
-            max-height: calc(100vh - 40px);
-            overflow-y: auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
         body.dark-mode .sidebar {
@@ -143,7 +150,7 @@
         .sidebar h3 {
             color: var(--primary);
             margin-bottom: 15px;
-            font-size: 1.1em;
+            font-size: 1.2em;
         }
 
         body.dark-mode .sidebar h3 {
@@ -155,403 +162,131 @@
         }
 
         .sidebar li {
-            margin-bottom: 10px;
+            margin: 8px 0;
         }
 
         .sidebar a {
             color: #666;
             text-decoration: none;
             display: block;
-            padding: 8px 12px;
+            padding: 8px 10px;
             border-radius: 5px;
-            transition: all 0.3s ease;
+            transition: all 0.3s;
         }
 
         body.dark-mode .sidebar a {
             color: #cbd5e0;
         }
 
-        .sidebar a:hover {
-            background: #f0f0f0;
-            color: var(--primary);
-            padding-left: 16px;
+        .sidebar a:hover, .sidebar a.active {
+            background: var(--primary);
+            color: white;
+            padding-left: 15px;
         }
 
-        body.dark-mode .sidebar a:hover {
-            background: #4a5568;
-            color: #60a5fa;
-        }
-
-        /* Main Content */
-        .main-content {
+        /* Content */
+        .content {
             background: white;
             padding: 40px;
             border-radius: 10px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
 
-        body.dark-mode .main-content {
+        body.dark-mode .content {
             background: #2d3748;
         }
 
-        .section {
-            margin-bottom: 40px;
+        /* Statistics Dashboard */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
         }
 
-        .section h2 {
-            color: var(--primary);
-            font-size: 2em;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 3px solid var(--primary);
-        }
-
-        body.dark-mode .section h2 {
-            color: #60a5fa;
-            border-bottom-color: #60a5fa;
-        }
-
-        .section h3 {
-            color: var(--secondary);
-            font-size: 1.5em;
-            margin-top: 25px;
-            margin-bottom: 15px;
-        }
-
-        body.dark-mode .section h3 {
-            color: #a78bfa;
-        }
-
-        .section h4 {
-            color: #666;
-            font-size: 1.2em;
-            margin-top: 15px;
-            margin-bottom: 10px;
-        }
-
-        body.dark-mode .section h4 {
-            color: #cbd5e0;
-        }
-
-        /* Cards */
-        .workflow-card {
-            background: #f8f9fa;
-            border-left: 4px solid var(--primary);
-            padding: 20px;
-            margin: 15px 0;
-            border-radius: 5px;
-            transition: all 0.3s;
-        }
-
-        body.dark-mode .workflow-card {
-            background: #4a5568;
-            border-left-color: #60a5fa;
-        }
-
-        .workflow-card:hover {
-            transform: translateX(5px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
-        }
-
-        .workflow-card h4 {
-            color: var(--primary);
-            margin-top: 0;
-        }
-
-        body.dark-mode .workflow-card h4 {
-            color: #60a5fa;
-        }
-
-        .workflow-card ul {
-            margin-left: 20px;
-            margin-top: 10px;
-        }
-
-        .workflow-card li {
-            margin-bottom: 8px;
-            color: #555;
-        }
-
-        body.dark-mode .workflow-card li {
-            color: #cbd5e0;
-        }
-
-        /* Tables */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-            border-radius: 5px;
-            overflow: hidden;
-        }
-
-        table th {
-            background: var(--primary);
+        .stat-card {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             color: white;
-            padding: 12px;
-            text-align: left;
-            font-weight: 600;
-        }
-
-        table td {
-            border-bottom: 1px solid #ddd;
-            padding: 12px;
-        }
-
-        body.dark-mode table td {
-            border-bottom-color: #4a5568;
-        }
-
-        table tr:hover {
-            background: #f8f9fa;
-        }
-
-        body.dark-mode table tr:hover {
-            background: #4a5568;
-        }
-
-        /* Code Blocks */
-        .code-block {
-            background: #2d2d2d;
-            color: #f8f8f2;
-            padding: 15px;
-            border-radius: 5px;
-            overflow-x: auto;
-            margin: 15px 0;
-            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-            font-size: 0.9em;
-            line-height: 1.5;
-            position: relative;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .code-block:hover {
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .code-block:hover::after {
-            content: "📋 Click to copy";
-            position: absolute;
-            top: 5px;
-            right: 10px;
-            font-size: 0.8em;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 5px 10px;
-            border-radius: 3px;
-            color: #fff;
-        }
-
-        /* Badges */
-        .badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.85em;
-            font-weight: 600;
-            margin-right: 8px;
-            margin-bottom: 8px;
-        }
-
-        .badge-success {
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .badge-warning {
-            background: #fff3cd;
-            color: #856404;
-        }
-
-        .badge-info {
-            background: #d1ecf1;
-            color: #0c5460;
-        }
-
-        .badge-danger {
-            background: #f8d7da;
-            color: #721c24;
-        }
-
-        /* Checklist */
-        .checklist {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 5px;
-            margin: 15px 0;
-        }
-
-        body.dark-mode .checklist {
-            background: #4a5568;
-        }
-
-        .checklist ul {
-            list-style: none;
-            margin-left: 0;
-        }
-
-        .checklist li {
-            padding: 8px 0;
-            padding-left: 30px;
-            position: relative;
-        }
-
-        .checklist li:before {
-            content: "☐";
-            position: absolute;
-            left: 0;
-            color: var(--primary);
-            font-weight: bold;
-            font-size: 1.2em;
-            cursor: pointer;
-        }
-
-        .checklist li.checked:before {
-            content: "☑";
-            color: var(--success);
-        }
-
-        .checklist li.checked {
-            opacity: 0.6;
-            text-decoration: line-through;
-        }
-
-        /* Flow Diagram */
-        .flow-diagram {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 5px;
-            margin: 20px 0;
-            font-family: monospace;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            color: #555;
-            border-left: 4px solid var(--primary);
-            overflow-x: auto;
-        }
-
-        body.dark-mode .flow-diagram {
-            background: #4a5568;
-            color: #cbd5e0;
-        }
-
-        /* Buttons */
-        .button-group {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 12px 24px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-            font-size: 1em;
-        }
-
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: var(--secondary);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn-secondary {
-            background: #f0f0f0;
-            color: #333;
-            border: 1px solid #ddd;
-        }
-
-        body.dark-mode .btn-secondary {
-            background: #4a5568;
-            color: #e2e8f0;
-            border-color: #718096;
-        }
-
-        .btn-secondary:hover {
-            background: #e0e0e0;
-        }
-
-        body.dark-mode .btn-secondary:hover {
-            background: #5a6b7f;
-        }
-
-        /* Alerts */
-        .alert {
-            padding: 15px;
-            border-radius: 5px;
-            margin: 15px 0;
-            border-left: 4px solid;
-        }
-
-        .alert-info {
-            background: #d1ecf1;
-            border-color: #0c5460;
-            color: #0c5460;
-        }
-
-        body.dark-mode .alert-info {
-            background: #1e3a4c;
-            color: #a0d8e8;
-        }
-
-        .alert-warning {
-            background: #fff3cd;
-            border-color: #856404;
-            color: #856404;
-        }
-
-        body.dark-mode .alert-warning {
-            background: #4a3c1a;
-            color: #f5d547;
-        }
-
-        .alert-success {
-            background: #d4edda;
-            border-color: #155724;
-            color: #155724;
-        }
-
-        body.dark-mode .alert-success {
-            background: #1e4620;
-            color: #7dd87d;
-        }
-
-        .alert-danger {
-            background: #f8d7da;
-            border-color: #721c24;
-            color: #721c24;
-        }
-
-        body.dark-mode .alert-danger {
-            background: #4a1c1c;
-            color: #f5a5a5;
-        }
-
-        /* Footer */
-        footer {
-            background: white;
             padding: 20px;
             border-radius: 10px;
             text-align: center;
-            color: #666;
-            margin-top: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
         }
 
-        body.dark-mode footer {
-            background: #2d3748;
-            color: #cbd5e0;
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-card .number {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .stat-card .label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        /* Workflow Sections */
+        .workflow-section {
+            margin: 30px 0;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        body.dark-mode .workflow-section {
+            border-color: #4a5568;
+        }
+
+        .workflow-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .workflow-header:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .workflow-header h3 {
+            font-size: 1.3em;
+            margin: 0;
+        }
+
+        .workflow-icon {
+            font-size: 1.5em;
+            transition: transform 0.3s;
+        }
+
+        .workflow-section.expanded .workflow-icon {
+            transform: rotate(180deg);
+        }
+
+        .workflow-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        body.dark-mode .workflow-content {
+            background: #1a202c;
+        }
+
+        .workflow-section.expanded .workflow-content {
+            max-height: 2000px;
+        }
+
+        .workflow-content-inner {
+            padding: 20px;
         }
 
         /* Tabs */
@@ -559,7 +294,8 @@
             display: flex;
             gap: 10px;
             margin: 20px 0;
-            border-bottom: 2px solid #ddd;
+            border-bottom: 2px solid #e0e0e0;
+            flex-wrap: wrap;
         }
 
         body.dark-mode .tabs {
@@ -571,8 +307,8 @@
             border: none;
             padding: 10px 20px;
             cursor: pointer;
+            font-size: 1em;
             color: #666;
-            font-weight: 600;
             border-bottom: 3px solid transparent;
             transition: all 0.3s;
         }
@@ -581,14 +317,9 @@
             color: #cbd5e0;
         }
 
-        .tab-button.active {
+        .tab-button:hover, .tab-button.active {
             color: var(--primary);
             border-bottom-color: var(--primary);
-        }
-
-        body.dark-mode .tab-button.active {
-            color: #60a5fa;
-            border-bottom-color: #60a5fa;
         }
 
         .tab-content {
@@ -597,69 +328,106 @@
 
         .tab-content.active {
             display: block;
+            animation: fadeIn 0.3s ease;
         }
 
-        /* Expandable Sections */
-        .expandable {
-            background: #f8f9fa;
-            border: 1px solid #ddd;
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Code Blocks */
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
             border-radius: 5px;
+            overflow-x: auto;
             margin: 15px 0;
+            position: relative;
         }
 
-        body.dark-mode .expandable {
-            background: #4a5568;
-            border-color: #718096;
+        .code-block pre {
+            margin: 0;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.9em;
         }
 
-        .expandable-header {
-            padding: 15px;
+        .copy-code-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
             cursor: pointer;
+            font-size: 0.8em;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .code-block:hover .copy-code-btn {
+            opacity: 1;
+        }
+
+        .copy-code-btn:hover {
+            background: var(--secondary);
+        }
+
+        .copy-code-btn.copied {
+            background: var(--success);
+        }
+
+        /* Checklist */
+        .checklist {
+            margin: 20px 0;
+        }
+
+        .checklist-item {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            font-weight: 600;
-            color: var(--primary);
-            user-select: none;
+            padding: 10px;
+            margin: 5px 0;
+            background: #f8f9fa;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
         }
 
-        body.dark-mode .expandable-header {
-            color: #60a5fa;
+        body.dark-mode .checklist-item {
+            background: #1a202c;
         }
 
-        .expandable-header:hover {
-            background: rgba(102, 126, 234, 0.1);
+        .checklist-item:hover {
+            background: #e0e0e0;
         }
 
-        .expandable-content {
-            display: none;
-            padding: 15px;
-            border-top: 1px solid #ddd;
+        body.dark-mode .checklist-item:hover {
+            background: #2d3748;
         }
 
-        body.dark-mode .expandable-content {
-            border-top-color: #718096;
+        .checklist-item input[type="checkbox"] {
+            margin-right: 10px;
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
         }
 
-        .expandable-content.active {
-            display: block;
-        }
-
-        .expand-icon {
-            transition: transform 0.3s;
-        }
-
-        .expand-icon.active {
-            transform: rotate(180deg);
+        .checklist-item.completed {
+            opacity: 0.6;
+            text-decoration: line-through;
         }
 
         /* Progress Bar */
         .progress-bar {
+            width: 100%;
+            height: 30px;
             background: #e0e0e0;
-            height: 8px;
-            border-radius: 4px;
+            border-radius: 15px;
             overflow: hidden;
-            margin: 10px 0;
+            margin: 20px 0;
         }
 
         body.dark-mode .progress-bar {
@@ -667,22 +435,181 @@
         }
 
         .progress-fill {
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
             height: 100%;
-            transition: width 0.3s;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            width: 0%;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        /* Alert Boxes */
+        .alert {
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            border-color: #10b981;
+            color: #065f46;
+        }
+
+        body.dark-mode .alert-success {
+            background: rgba(16, 185, 129, 0.1);
+            color: #a7f3d0;
+        }
+
+        .alert-warning {
+            background: #fef3c7;
+            border-color: #f59e0b;
+            color: #92400e;
+        }
+
+        body.dark-mode .alert-warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: #fcd34d;
+        }
+
+        .alert-danger {
+            background: #fee2e2;
+            border-color: #ef4444;
+            color: #7f1d1d;
+        }
+
+        body.dark-mode .alert-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: #fca5a5;
+        }
+
+        .alert-info {
+            background: #dbeafe;
+            border-color: #3b82f6;
+            color: #1e3a8a;
+        }
+
+        body.dark-mode .alert-info {
+            background: rgba(59, 130, 246, 0.1);
+            color: #93c5fd;
+        }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin: 5px 5px 5px 0;
+        }
+
+        .status-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .status-warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        .status-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .status-info {
+            background: var(--info);
+            color: white;
+        }
+
+        /* Headings */
+        h2 {
+            color: var(--primary);
+            margin: 30px 0 15px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        body.dark-mode h2 {
+            color: #60a5fa;
+            border-bottom-color: #60a5fa;
+        }
+
+        h3 {
+            color: var(--secondary);
+            margin: 20px 0 10px 0;
+        }
+
+        body.dark-mode h3 {
+            color: #a78bfa;
+        }
+
+        h4 {
+            color: #666;
+            margin: 15px 0 10px 0;
+        }
+
+        body.dark-mode h4 {
+            color: #cbd5e0;
+        }
+
+        /* Lists */
+        ul, ol {
+            margin: 15px 0 15px 30px;
+        }
+
+        li {
+            margin: 8px 0;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        body.dark-mode th, body.dark-mode td {
+            border-bottom-color: #4a5568;
+        }
+
+        th {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            font-weight: bold;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        body.dark-mode tr:hover {
+            background: #1a202c;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: white;
+            margin-top: 40px;
         }
 
         /* Responsive */
         @media (max-width: 768px) {
-            .content {
-                grid-template-columns: 1fr;
-            }
-
-            .sidebar {
-                position: static;
-                max-height: none;
-            }
-
             header {
                 flex-direction: column;
                 text-align: center;
@@ -692,593 +619,563 @@
                 font-size: 1.8em;
             }
 
-            .main-content {
+            .content {
                 padding: 20px;
             }
 
-            .button-group {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tabs {
                 flex-direction: column;
             }
 
-            .btn {
-                width: 100%;
-                text-align: center;
+            table {
+                font-size: 0.9em;
             }
 
-            .header-controls {
-                margin-top: 15px;
-                width: 100%;
-                justify-content: center;
+            th, td {
+                padding: 8px;
             }
-        }
-
-        /* Scrollbar Styling */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-
-        body.dark-mode ::-webkit-scrollbar-track {
-            background: #2d3748;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--primary);
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--secondary);
         }
 
         /* Animations */
         @keyframes slideIn {
             from {
                 opacity: 0;
-                transform: translateY(10px);
+                transform: translateX(-20px);
             }
             to {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translateX(0);
             }
         }
 
-        .section {
-            animation: slideIn 0.5s ease-out;
-        }
-
-        /* Highlight */
-        .highlight {
-            background: #fff3cd;
-            padding: 2px 6px;
-            border-radius: 3px;
-        }
-
-        body.dark-mode .highlight {
-            background: #4a3c1a;
-        }
-
-        /* Stats Box */
-        .stats-box {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin: 20px 0;
-        }
-
-        .stat-item {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 5px;
-            text-align: center;
-            border-top: 3px solid var(--primary);
-        }
-
-        body.dark-mode .stat-item {
-            background: #4a5568;
-            border-top-color: #60a5fa;
-        }
-
-        .stat-number {
-            font-size: 1.8em;
-            font-weight: bold;
-            color: var(--primary);
-        }
-
-        body.dark-mode .stat-number {
-            color: #60a5fa;
-        }
-
-        .stat-label {
-            font-size: 0.9em;
-            color: #666;
-            margin-top: 5px;
-        }
-
-        body.dark-mode .stat-label {
-            color: #cbd5e0;
+        .workflow-section {
+            animation: slideIn 0.3s ease;
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Header -->
         <header>
             <div class="header-content">
                 <h1>🚀 CI/CD Pipeline Guide</h1>
-                <p>คู่มือการใช้งาน GitHub Actions CI/CD Pipeline สำหรับ TechSpark Platform</p>
-                <div class="breadcrumb">
-                    <a href="/">Home</a> / <a href="/docs">Documentation</a> / CI/CD Guide
-                </div>
+                <p>TechSpark AI Platform - Automated Deployment & Testing</p>
             </div>
             <div class="header-controls">
                 <button class="theme-toggle" onclick="toggleTheme()">🌙 Dark Mode</button>
-                <button class="toc-toggle" onclick="toggleSidebar()">📋 TOC</button>
+                <button class="expand-all-btn" onclick="expandAll()">📂 Expand All</button>
+                <button class="toc-toggle" onclick="toggleSidebar()">☰ Menu</button>
             </div>
         </header>
 
-        <div class="content">
-            <aside class="sidebar">
-                <h3>📋 เนื้อหา</h3>
+        <div class="main-layout">
+            <!-- Sidebar -->
+            <aside class="sidebar" id="sidebar">
+                <h3>📑 Table of Contents</h3>
                 <ul>
-                    <li><a href="#overview">Overview</a></li>
-                    <li><a href="#workflows">Workflows</a></li>
-                    <li><a href="#setup">Setup</a></li>
-                    <li><a href="#secrets">Secrets</a></li>
-                    <li><a href="#monitoring">Monitoring</a></li>
-                    <li><a href="#troubleshooting">Troubleshooting</a></li>
-                    <li><a href="#performance">Performance</a></li>
-                    <li><a href="#resources">Resources</a></li>
+                    <li><a href="#overview" onclick="scrollTo('overview')">Overview</a></li>
+                    <li><a href="#workflows" onclick="scrollTo('workflows')">Workflows</a></li>
+                    <li><a href="#setup" onclick="scrollTo('setup')">Setup</a></li>
+                    <li><a href="#monitoring" onclick="scrollTo('monitoring')">Monitoring</a></li>
+                    <li><a href="#troubleshooting" onclick="scrollTo('troubleshooting')">Troubleshooting</a></li>
+                    <li><a href="#best-practices" onclick="scrollTo('best-practices')">Best Practices</a></li>
                 </ul>
             </aside>
 
-            <main class="main-content">
+            <!-- Main Content -->
+            <main class="content">
+                <!-- Statistics Dashboard -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="number">5</div>
+                        <div class="label">Workflows</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="number">15+</div>
+                        <div class="label">Jobs</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="number">50+</div>
+                        <div class="label">Steps</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="number">100%</div>
+                        <div class="label">Automated</div>
+                    </div>
+                </div>
+
                 <!-- Overview Section -->
-                <section class="section" id="overview">
-                    <h2>🎯 Overview</h2>
-                    <p>TechSpark Platform ใช้ GitHub Actions สำหรับ Continuous Integration/Continuous Deployment (CI/CD)</p>
-
-                    <h3>✨ Features</h3>
-                    <div class="workflow-card">
-                        <ul>
-                            <li><span class="badge badge-success">✅</span> Automated Testing</li>
-                            <li><span class="badge badge-success">✅</span> Code Quality Checks</li>
-                            <li><span class="badge badge-success">✅</span> Security Scanning</li>
-                            <li><span class="badge badge-success">✅</span> Automated Deployment</li>
-                            <li><span class="badge badge-success">✅</span> Release Management</li>
-                            <li><span class="badge badge-success">✅</span> Documentation Publishing</li>
-                        </ul>
+                <section id="overview">
+                    <h2>📋 Overview</h2>
+                    <p>TechSpark AI Platform uses GitHub Actions for continuous integration and deployment. Our CI/CD pipeline ensures code quality, security, and reliable deployments.</p>
+                    
+                    <div class="alert alert-info">
+                        <strong>ℹ️ Info:</strong> All workflows run automatically on push to main or pull requests.
                     </div>
 
-                    <h3>📊 Pipeline Statistics</h3>
-                    <div class="stats-box">
-                        <div class="stat-item">
-                            <div class="stat-number">5</div>
-                            <div class="stat-label">Workflows</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number">15+</div>
-                            <div class="stat-label">Jobs</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number">50+</div>
-                            <div class="stat-label">Steps</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number">100%</div>
-                            <div class="stat-label">Automated</div>
-                        </div>
-                    </div>
-
-                    <h3>🔄 Pipeline Flow</h3>
-                    <div class="flow-diagram">Push Code
+                    <h3>Pipeline Architecture</h3>
+                    <div class="code-block">
+                        <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>
+Push to GitHub
     ↓
-├─ Lint & Test
-│  ├─ ESLint
-│  ├─ TypeScript Check
-│  ├─ Unit Tests
-│  └─ Build
-├─ Code Quality
-│  ├─ SonarQube
-│  ├─ Dependency Check
-│  └─ License Check
-├─ Security
-│  ├─ Vulnerability Scan
-│  └─ SBOM Generation
-└─ Deploy (if main branch)
-   ├─ Build Frontend
-   ├─ Deploy to Vercel
-   └─ Create Release</div>
+Lint & Test Workflow
+    ├─ ESLint
+                        ├─ TypeScript Check
+    ├─ Unit Tests
+    └─ Build
+    ↓
+Code Quality Workflow
+    ├─ SonarQube Analysis
+    ├─ Dependency Check
+    └─ Security Scan
+    ↓
+Deploy Workflow (if main branch)
+    ├─ Build Production
+    ├─ Deploy to Vercel
+    └─ Create Release
+                        </pre>
+                    </div>
                 </section>
 
                 <!-- Workflows Section -->
-                <section class="section" id="workflows">
-                    <h2>🔄 Workflows</h2>
+                <section id="workflows">
+                    <h2>⚙️ Workflows</h2>
 
-                    <div class="expandable">
-                        <div class="expandable-header" onclick="toggleExpandable(this)">
-                            <span>1. Lint & Test Workflow</span>
-                            <span class="expand-icon">▼</span>
+                    <!-- Lint & Test Workflow -->
+                    <div class="workflow-section">
+                        <div class="workflow-header" onclick="toggleWorkflow(this)">
+                            <h3>1. Lint & Test Workflow</h3>
+                            <span class="workflow-icon">▼</span>
                         </div>
-                        <div class="expandable-content">
-                            <div class="workflow-card">
-                                <h4>lint-and-test.yml</h4>
-                                <p><strong>Trigger:</strong> Push to main/develop, Pull Request</p>
-                                <p><strong>Jobs:</strong></p>
+                        <div class="workflow-content">
+                            <div class="workflow-content-inner">
+                                <p><strong>Trigger:</strong> On every push and pull request</p>
+                                <p><strong>Duration:</strong> ~5-10 minutes</p>
+                                
+                                <h4>Jobs:</h4>
                                 <ul>
-                                    <li><strong>lint</strong> - ESLint, TypeScript, Prettier</li>
-                                    <li><strong>test</strong> - Unit tests, Coverage</li>
-                                    <li><strong>build</strong> - Build artifacts</li>
-                                    <li><strong>security</strong> - Vulnerability scanning</li>
-                                    <li><strong>documentation</strong> - Documentation validation</li>
+                                    <li>ESLint - Code style checking</li>
+                                    <li>TypeScript - Type checking</li>
+                                    <li>Prettier - Code formatting</li>
+                                    <li>Unit Tests - Test coverage</li>
+                                    <li>Build - Production build</li>
+                                    <li>Security Scan - Vulnerability detection</li>
                                 </ul>
-                                <h4 style="margin-top: 15px;">Progress</h4>
-                                <div class="progress-bar">
-                                    <div class="progress-fill" style="width: 100%"></div>
+
+                                <h4>Configuration:</h4>
+                                <div class="code-block">
+                                    <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+                                    <pre>
+name: Lint & Test
+on: [push, pull_request]
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+      - run: npm install
+      - run: npm run lint
+      - run: npm run type-check
+      - run: npm run test
+      - run: npm run build
+                                    </pre>
+                                </div>
+
+                                <div class="alert alert-success">
+                                    <strong>✅ Success:</strong> All checks pass before merging to main
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="expandable">
-                        <div class="expandable-header" onclick="toggleExpandable(this)">
-                            <span>2. Deploy Workflow</span>
-                            <span class="expand-icon">▼</span>
+                    <!-- Deploy Workflow -->
+                    <div class="workflow-section">
+                        <div class="workflow-header" onclick="toggleWorkflow(this)">
+                            <h3>2. Deploy Workflow</h3>
+                            <span class="workflow-icon">▼</span>
                         </div>
-                        <div class="expandable-content">
-                            <div class="workflow-card">
-                                <h4>deploy.yml</h4>
-                                <p><strong>Trigger:</strong> Push to main, Manual trigger</p>
-                                <p><strong>Jobs:</strong></p>
-                                <ul>
-                                    <li>Build Frontend</li>
+                        <div class="workflow-content">
+                            <div class="workflow-content-inner">
+                                <p><strong>Trigger:</strong> On push to main branch only</p>
+                                <p><strong>Duration:</strong> ~3-5 minutes</p>
+                                
+                                <h4>Steps:</h4>
+                                <ol>
+                                    <li>Build production bundle</li>
                                     <li>Deploy to Vercel</li>
                                     <li>Create GitHub Release</li>
-                                    <li>Notify Slack</li>
-                                </ul>
+                                    <li>Send Slack notification</li>
+                                </ol>
+
+                                <h4>Configuration:</h4>
+                                <div class="code-block">
+                                    <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+                                    <pre>
+name: Deploy
+on:
+  push:
+    branches: [main]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: npm run build
+      - uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+                                    </pre>
+                                </div>
+
+                                <div class="alert alert-warning">
+                                    <strong>⚠️ Warning:</strong> Requires Vercel token in GitHub Secrets
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="expandable">
-                        <div class="expandable-header" onclick="toggleExpandable(this)">
-                            <span>3. Code Quality Workflow</span>
-                            <span class="expand-icon">▼</span>
+                    <!-- Code Quality Workflow -->
+                    <div class="workflow-section">
+                        <div class="workflow-header" onclick="toggleWorkflow(this)">
+                            <h3>3. Code Quality Workflow</h3>
+                            <span class="workflow-icon">▼</span>
                         </div>
-                        <div class="expandable-content">
-                            <div class="workflow-card">
-                                <h4>code-quality.yml</h4>
-                                <p><strong>Trigger:</strong> Push to main/develop, Pull Request</p>
-                                <p><strong>Jobs:</strong></p>
+                        <div class="workflow-content">
+                            <div class="workflow-content-inner">
+                                <p><strong>Trigger:</strong> On every push</p>
+                                <p><strong>Duration:</strong> ~8-12 minutes</p>
+                                
+                                <h4>Checks:</h4>
                                 <ul>
                                     <li>SonarQube Analysis</li>
                                     <li>Dependency Check</li>
                                     <li>License Verification</li>
-                                    <li>Performance Analysis</li>
+                                    <li>Performance Analysis (Lighthouse)</li>
                                     <li>Accessibility Check</li>
                                 </ul>
+
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 85%;">85% Quality</div>
+                                </div>
+
+                                <div class="alert alert-info">
+                                    <strong>ℹ️ Info:</strong> Results available in GitHub Actions tab
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="expandable">
-                        <div class="expandable-header" onclick="toggleExpandable(this)">
-                            <span>4. Release Workflow</span>
-                            <span class="expand-icon">▼</span>
+                    <!-- PR Checks Workflow -->
+                    <div class="workflow-section">
+                        <div class="workflow-header" onclick="toggleWorkflow(this)">
+                            <h3>4. PR Checks Workflow</h3>
+                            <span class="workflow-icon">▼</span>
                         </div>
-                        <div class="expandable-content">
-                            <div class="workflow-card">
-                                <h4>release.yml</h4>
-                                <p><strong>Trigger:</strong> Push tag (v*), Manual trigger</p>
-                                <p><strong>Jobs:</strong></p>
+                        <div class="workflow-content">
+                            <div class="workflow-content-inner">
+                                <p><strong>Trigger:</strong> On pull request events</p>
+                                <p><strong>Duration:</strong> ~5 minutes</p>
+                                
+                                <h4>Validations:</h4>
                                 <ul>
-                                    <li>Create Release Notes</li>
-                                    <li>Publish Release</li>
+                                    <li>PR title validation</li>
+                                    <li>Commit message linting</li>
+                                    <li>Branch protection rules</li>
+                                    <li>Auto-merge on success (optional)</li>
+                                </ul>
+
+                                <div class="alert alert-success">
+                                    <strong>✅ Success:</strong> PR ready to merge after all checks pass
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Release Workflow -->
+                    <div class="workflow-section">
+                        <div class="workflow-header" onclick="toggleWorkflow(this)">
+                            <h3>5. Release Workflow</h3>
+                            <span class="workflow-icon">▼</span>
+                        </div>
+                        <div class="workflow-content">
+                            <div class="workflow-content-inner">
+                                <p><strong>Trigger:</strong> Manual or on version tag</p>
+                                <p><strong>Duration:</strong> ~10 minutes</p>
+                                
+                                <h4>Release Steps:</h4>
+                                <ol>
+                                    <li>Create release notes</li>
+                                    <li>Publish to GitHub Releases</li>
                                     <li>Update CHANGELOG</li>
-                                    <li>Deploy Documentation</li>
-                                    <li>Announce Release</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
+                                    <li>Deploy to GitHub Pages</li>
+                                    <li>Announce on social media</li>
+                                </ol>
 
-                    <div class="expandable">
-                        <div class="expandable-header" onclick="toggleExpandable(this)">
-                            <span>5. PR Checks Workflow</span>
-                            <span class="expand-icon">▼</span>
-                        </div>
-                        <div class="expandable-content">
-                            <div class="workflow-card">
-                                <h4>pr-checks.yml</h4>
-                                <p><strong>Trigger:</strong> Pull Request</p>
-                                <p><strong>Jobs:</strong></p>
-                                <ul>
-                                    <li>PR Title Validation</li>
-                                    <li>PR Description Check</li>
-                                    <li>File Changes Check</li>
-                                    <li>Commit Lint</li>
-                                    <li>Dependency Check</li>
-                                    <li>Code Review Hints</li>
-                                </ul>
+                                <div class="alert alert-info">
+                                    <strong>ℹ️ Info:</strong> Triggered by creating a git tag: <code>git tag v1.0.0</code>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </section>
 
                 <!-- Setup Section -->
-                <section class="section" id="setup">
-                    <h2>🚀 Setup Instructions</h2>
+                <section id="setup">
+                    <h2>🔧 Setup Instructions</h2>
 
-                    <h3>Step 1: Enable GitHub Actions</h3>
-                    <ol>
-                        <li>Go to Repository Settings</li>
-                        <li>Click "Actions" → "General"</li>
-                        <li>Enable "Allow all actions and reusable workflows"</li>
-                    </ol>
-
-                    <h3>Step 2: Configure Secrets</h3>
-                    <p>Add the following secrets to GitHub:</p>
-                    <p><strong>Settings → Secrets and variables → Actions</strong></p>
-
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Secret Name</th>
-                                <th>Description</th>
-                                <th>Required</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>VERCEL_TOKEN</td>
-                                <td>Vercel deployment token</td>
-                                <td><span class="badge badge-danger">Yes</span></td>
-                            </tr>
-                            <tr>
-                                <td>VERCEL_ORG_ID</td>
-                                <td>Vercel organization ID</td>
-                                <td><span class="badge badge-danger">Yes</span></td>
-                            </tr>
-                            <tr>
-                                <td>VERCEL_PROJECT_ID</td>
-                                <td>Vercel project ID</td>
-                                <td><span class="badge badge-danger">Yes</span></td>
-                            </tr>
-                            <tr>
-                                <td>SLACK_WEBHOOK</td>
-                                <td>Slack webhook URL</td>
-                                <td><span class="badge badge-warning">Optional</span></td>
-                            </tr>
-                            <tr>
-                                <td>SONAR_TOKEN</td>
-                                <td>SonarQube token</td>
-                                <td><span class="badge badge-warning">Optional</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <h3>Step 3: Configure Branch Protection</h3>
-                    <ol>
-                        <li>Go to Repository Settings</li>
-                        <li>Click "Branches"</li>
-                        <li>Add rule for "main":
-                            <ul>
-                                <li>✅ Require status checks to pass</li>
-                                <li>✅ Require branches to be up to date</li>
-                                <li>✅ Dismiss stale reviews</li>
-                            </ul>
-                        </li>
-                    </ol>
-
-                    <h3>Setup Checklist</h3>
-                    <div class="checklist">
-                        <ul>
-                            <li onclick="toggleCheckbox(this)">Add Secrets to GitHub (VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID)</li>
-                            <li onclick="toggleCheckbox(this)">Configure Branch Protection</li>
-                            <li onclick="toggleCheckbox(this)">Setup Vercel Integration</li>
-                            <li onclick="toggleCheckbox(this)">Test Workflows</li>
-                            <li onclick="toggleCheckbox(this)">Monitor Workflows</li>
-                        </ul>
-                    </div>
-                </section>
-
-                <!-- Secrets Section -->
-                <section class="section" id="secrets">
-                    <h2>🔐 Secrets Management</h2>
-
-                    <h3>Adding Secrets</h3>
+                    <h3>Step 1: Configure GitHub Secrets</h3>
+                    <p>Go to Settings → Secrets and add:</p>
                     <div class="code-block">
-# Using GitHub CLI
-gh secret set SECRET_NAME --body "secret_value"
-
-# Or via GitHub UI
-Settings → Secrets and variables → Actions → New repository secret</div>
-
-                    <h3>Using Secrets in Workflows</h3>
-                    <div class="code-block">env:
-  API_KEY: ${{ secrets.API_KEY }}</div>
-
-                    <h3>Secret Best Practices</h3>
-                    <div class="alert alert-info">
-                        <strong>💡 Best Practices:</strong>
-                        <ul>
-                            <li>✅ Never commit secrets</li>
-                            <li>✅ Use GitHub Secrets</li>
-                            <li>✅ Rotate secrets regularly</li>
-                            <li>✅ Use minimal permissions</li>
-                            <li>✅ Audit secret access</li>
-                        </ul>
+                        <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>
+VERCEL_TOKEN          # Vercel deployment token
+SONARQUBE_TOKEN       # SonarQube analysis token
+SLACK_WEBHOOK_URL     # Slack notification webhook
+NPM_TOKEN             # NPM registry token (optional)
+                        </pre>
                     </div>
+
+                    <h3>Step 2: Enable Branch Protection</h3>
+                    <div class="checklist">
+                        <div class="checklist-item" onclick="toggleCheckbox(this)">
+                            <input type="checkbox">
+                            <span>Require status checks to pass before merging</span>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheckbox(this)">
+                            <input type="checkbox">
+                            <span>Require code reviews before merging</span>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheckbox(this)">
+                            <input type="checkbox">
+                            <span>Dismiss stale pull request approvals</span>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheckbox(this)">
+                            <input type="checkbox">
+                            <span>Require branches to be up to date before merging</span>
+                        </div>
+                    </div>
+
+                    <h3>Step 3: Configure Workflows</h3>
+                    <p>Edit workflow files in <code>.github/workflows/</code>:</p>
+                    <ul>
+                        <li><code>lint-and-test.yml</code> - Linting and testing</li>
+                        <li><code>deploy.yml</code> - Deployment</li>
+                        <li><code>code-quality.yml</code> - Code quality checks</li>
+                        <li><code>pr-checks.yml</code> - PR validation</li>
+                        <li><code>release.yml</code> - Release management</li>
+                    </ul>
                 </section>
 
                 <!-- Monitoring Section -->
-                <section class="section" id="monitoring">
-                    <h2>📊 Monitoring</h2>
+                <section id="monitoring">
+                    <h2>📊 Monitoring & Status</h2>
 
                     <h3>View Workflow Status</h3>
-                    <ol>
-                        <li>Go to Repository</li>
-                        <li>Click "Actions" tab</li>
-                        <li>View workflow runs</li>
-                    </ol>
+                    <p>Click "Actions" tab in GitHub repository to see:</p>
+                    <ul>
+                        <li>All workflow runs</li>
+                        <li>Job status and duration</li>
+                        <li>Logs for each step</li>
+                        <li>Artifacts and reports</li>
+                    </ul>
 
-                    <h3>Workflow Tabs</h3>
+                    <h3>Status Badges</h3>
+                    <p>Add to README.md:</p>
+                    <div class="code-block">
+                        <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>
+[![Lint & Test](https://github.com/techspark-ai/techspark-platform/workflows/Lint%20%26%20Test/badge.svg)](https://github.com/techspark-ai/techspark-platform/actions)
+[![Deploy](https://github.com/techspark-ai/techspark-platform/workflows/Deploy/badge.svg)](https://github.com/techspark-ai/techspark-platform/actions)
+[![Code Quality](https://github.com/techspark-ai/techspark-platform/workflows/Code%20Quality/badge.svg)](https://github.com/techspark-ai/techspark-platform/actions)
+                        </pre>
+                    </div>
+
+                    <h3>Notifications</h3>
+                    <div class="alert alert-info">
+                        <strong>ℹ️ Info:</strong> Configure notifications in GitHub Settings → Notifications
+                    </div>
+
                     <div class="tabs">
-                        <button class="tab-button active" onclick="switchTab(event, 'tab1')">Status Badges</button>
-                        <button class="tab-button" onclick="switchTab(event, 'tab2')">Notifications</button>
-                        <button class="tab-button" onclick="switchTab(event, 'tab3')">Metrics</button>
+                        <button class="tab-button active" onclick="switchTab(event, 'email-notif')">Email</button>
+                        <button class="tab-button" onclick="switchTab(event, 'slack-notif')">Slack</button>
+                        <button class="tab-button" onclick="switchTab(event, 'webhook-notif')">Webhook</button>
                     </div>
 
-                    <div id="tab1" class="tab-content active">
-                        <h4>Status Badges</h4>
-                        <p>Add to README:</p>
-                        <div class="code-block">![Lint & Test](https://github.com/techspark-ai/techspark-platform/workflows/Lint%20&%20Test/badge.svg)
-![Deploy](https://github.com/techspark-ai/techspark-platform/workflows/Deploy/badge.svg)
-![Code Quality](https://github.com/techspark-ai/techspark-platform/workflows/Code%20Quality/badge.svg)</div>
+                    <div id="email-notif" class="tab-content active">
+                        <p>Receive email notifications for workflow failures and successes.</p>
+                        <p>Configure in: Settings → Notifications → Email</p>
                     </div>
 
-                    <div id="tab2" class="tab-content">
-                        <h4>Notifications</h4>
-                        <ul>
-                            <li>Email notifications (default)</li>
-                            <li>Slack notifications (optional)</li>
-                            <li>Custom webhooks</li>
-                        </ul>
+                    <div id="slack-notif" class="tab-content">
+                        <p>Get real-time Slack notifications for CI/CD events.</p>
+                        <div class="code-block">
+                            <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+                            <pre>
+- name: Slack Notification
+  uses: slackapi/slack-github-action@v1
+  with:
+    webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
+                            </pre>
+                        </div>
                     </div>
 
-                    <div id="tab3" class="tab-content">
-                        <h4>Key Metrics</h4>
-                        <ul>
-                            <li>Build success rate</li>
-                            <li>Average build time</li>
-                            <li>Test coverage</li>
-                            <li>Deployment frequency</li>
-                        </ul>
+                    <div id="webhook-notif" class="tab-content">
+                        <p>Send workflow events to custom webhooks.</p>
+                        <p>Configure in: Settings → Webhooks</p>
                     </div>
                 </section>
 
                 <!-- Troubleshooting Section -->
-                <section class="section" id="troubleshooting">
-                    <h2>🐛 Troubleshooting</h2>
+                <section id="troubleshooting">
+                    <h2>🔍 Troubleshooting</h2>
 
                     <h3>Common Issues</h3>
 
-                    <div class="expandable">
-                        <div class="expandable-header" onclick="toggleExpandable(this)">
-                            <span>Build Fails</span>
-                            <span class="expand-icon">▼</span>
+                    <div class="workflow-section">
+                        <div class="workflow-header" onclick="toggleWorkflow(this)">
+                            <h3>❌ Workflow Failed: "npm: command not found"</h3>
+                            <span class="workflow-icon">▼</span>
                         </div>
-                        <div class="expandable-content">
-                            <div class="alert alert-warning">
-                                <strong>Solution:</strong>
-                                <ul>
-                                    <li>Check logs in Actions tab</li>
-                                    <li>Common causes: Missing dependencies, Environment variables not set, Node version mismatch</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="expandable">
-                        <div class="expandable-header" onclick="toggleExpandable(this)">
-                            <span>Deployment Fails</span>
-                            <span class="expand-icon">▼</span>
-                        </div>
-                        <div class="expandable-content">
-                            <div class="alert alert-warning">
-                                <strong>Solution:</strong>
-                                <ul>
-                                    <li>Check Vercel logs</li>
-                                    <li>Verify secrets are set correctly</li>
-                                    <li>Check branch protection rules</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="expandable">
-                        <div class="expandable-header" onclick="toggleExpandable(this)">
-                            <span>Tests Fail</span>
-                            <span class="expand-icon">▼</span>
-                        </div>
-                        <div class="expandable-content">
-                            <div class="alert alert-warning">
-                                <strong>Solution:</strong>
-                                <ul>
-                                    <li>Run tests locally: <code>npm run test</code></li>
-                                    <li>Check test configuration</li>
-                                    <li>Review test output in GitHub Actions</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
-                    <h3>Debug Mode</h3>
-                    <p>Enable debug logging:</p>
-                    <div class="code-block">env:
-  ACTIONS_STEP_DEBUG: true</div>
-                </section>
-
-                <!-- Performance Section -->
-                <section class="section" id="performance">
-                    <h2>⚡ Performance Optimization</h2>
-
-                    <h3>Caching</h3>
-                    <div class="code-block">- uses: actions/setup-node@v4
+                        <div class="workflow-content">
+                            <div class="workflow-content-inner">
+                                <p><strong>Solution:</strong> Add setup-node action before npm commands</p>
+                                <div class="code-block">
+                                    <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+                                    <pre>
+- uses: actions/setup-node@v3
   with:
-    cache: 'npm'</div>
-
-                    <h3>Parallel Jobs</h3>
-                    <div class="alert alert-success">
-                        <strong>✅ Current Setup:</strong>
-                        <p>Lint, Test, and Build jobs run in parallel for faster feedback</p>
+    node-version: '18'
+                                    </pre>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <h3>Conditional Steps</h3>
-                    <div class="code-block">- if: github.ref == 'refs/heads/main'
-  run: npm run deploy</div>
+                    <div class="workflow-section">
+                        <div class="workflow-header" onclick="toggleWorkflow(this)">
+                            <h3>❌ Workflow Failed: "Permission denied"</h3>
+                            <span class="workflow-icon">▼</span>
+                        </div>
+                        <div class="workflow-content">
+                            <div class="workflow-content-inner">
+                                <p><strong>Solution:</strong> Check GitHub token permissions</p>
+                                <ol>
+                                    <li>Go to Settings → Developer settings → Personal access tokens</li>
+                                    <li>Verify token has required scopes: <code>repo</code>, <code>workflow</code></li>
+                                    <li>Regenerate token if needed</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="workflow-section">
+                        <div class="workflow-header" onclick="toggleWorkflow(this)">
+                            <h3>❌ Tests Failing Locally but Passing in CI</h3>
+                            <span class="workflow-icon">▼</span>
+                        </div>
+                        <div class="workflow-content">
+                            <div class="workflow-content-inner">
+                                <p><strong>Solution:</strong> Check environment differences</p>
+                                <ul>
+                                    <li>Verify Node.js version matches</li>
+                                    <li>Check for environment variables</li>
+                                    <li>Clear node_modules and reinstall</li>
+                                    <li>Check for timing-dependent tests</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="workflow-section">
+                        <div class="workflow-header" onclick="toggleWorkflow(this)">
+                            <h3>❌ Deployment Failed: "Vercel token invalid"</h3>
+                            <span class="workflow-icon">▼</span>
+                        </div>
+                        <div class="workflow-content">
+                            <div class="workflow-content-inner">
+                                <p><strong>Solution:</strong> Update Vercel token</p>
+                                <ol>
+                                    <li>Go to Vercel dashboard → Settings → Tokens</li>
+                                    <li>Create new token</li>
+                                    <li>Update GitHub secret: <code>VERCEL_TOKEN</code></li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
                 </section>
 
-                <!-- Resources Section -->
-                <section class="section" id="resources">
-                    <h2>📚 Resources</h2>
+                <!-- Best Practices Section -->
+                <section id="best-practices">
+                    <h2>⭐ Best Practices</h2>
 
-                    <h3>Official Documentation</h3>
+                    <h3>1. Keep Workflows Simple</h3>
+                    <div class="alert alert-success">
+                        <strong>✅ Do:</strong> Break complex workflows into smaller, focused jobs
+                    </div>
+                    <div class="alert alert-danger">
+                        <strong>❌ Don't:</strong> Create monolithic workflows with too many steps
+                    </div>
+
+                    <h3>2. Use Caching</h3>
+                    <div class="code-block">
+                        <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>
+- uses: actions/cache@v3
+  with:
+    path: ~/.npm
+    key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+    restore-keys: |
+      ${{ runner.os }}-node-
+                        </pre>
+                    </div>
+
+                    <h3>3. Secure Secrets</h3>
+                    <ul>
+                        <li>Never commit secrets to repository</li>
+                        <li>Use GitHub Secrets for sensitive data</li>
+                        <li>Rotate tokens regularly</li>
+                        <li>Use environment-specific secrets</li>
+                    </ul>
+
+                    <h3>4. Monitor Workflow Performance</h3>
+                    <ul>
+                        <li>Track workflow duration trends</li>
+                        <li>Optimize slow steps</li>
+                        <li>Use parallel jobs when possible</li>
+                        <li>Cache dependencies</li>
+                    </ul>
+
+                    <h3>5. Document Everything</h3>
+                    <ul>
+                        <li>Add comments to workflow files</li>
+                        <li>Document required secrets</li>
+                        <li>Keep README updated</li>
+                        <li>Create troubleshooting guide</li>
+                    </ul>
+                </section>
+
+                <!-- Additional Resources -->
+                <section>
+                    <h2>📚 Additional Resources</h2>
                     <ul>
                         <li><a href="https://docs.github.com/en/actions" target="_blank">GitHub Actions Documentation</a></li>
-                        <li><a href="https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions" target="_blank">Workflow Syntax</a></li>
-                        <li><a href="https://github.com/marketplace?type=actions" target="_blank">Actions Marketplace</a></li>
-                    </ul>
-
-                    <h3>Related Guides</h3>
-                    <ul>
-                        <li><a href="./setup-guide.md">Setup Guide</a></li>
-                        <li><a href="./architecture.md">Architecture</a></li>
-                        <li><a href="./prompt-engineering-guide.md">Prompt Engineering Guide</a></li>
-                    </ul>
-
-                    <h3>Support</h3>
-                    <ul>
-                        <li>📧 Email: support@techspark.ai</li>
-                        <li>💬 Discord: <a href="https://discord.gg/techspark" target="_blank">Join Community</a></li>
-                        <li>🐛 Issues: <a href="https://github.com/techspark-ai/techspark-platform/issues" target="_blank">GitHub Issues</a></li>
+                        <li><a href="https://github.com/actions" target="_blank">GitHub Actions Marketplace</a></li>
+                        <li><a href="https://vercel.com/docs" target="_blank">Vercel Documentation</a></li>
+                        <li><a href="https://www.sonarqube.org/" target="_blank">SonarQube</a></li>
                     </ul>
                 </section>
-
-                <div class="button-group">
-                    <a href="https://github.com/techspark-ai/techspark-platform" class="btn btn-primary">View on GitHub</a>
-                    <a href="./setup-guide.md" class="btn btn-secondary">Setup Guide</a>
-                    <a href="/" class="btn btn-secondary">Back to Home</a>
-                </div>
             </main>
         </div>
 
+        <!-- Footer -->
         <footer>
-            <p>Made with ❤️ by <strong>TechSpark AI</strong></p>
-            <p>© 2026 TechSpark AI. All rights reserved. | <a href="https://github.com/techspark-ai/techspark-platform/blob/main/LICENSE" target="_blank">MIT License</a></p>
+            <p>TechSpark AI Platform - CI/CD Guide | Last Updated: March 31, 2026</p>
         </footer>
     </div>
 
@@ -1294,76 +1191,90 @@ Settings → Secrets and variables → Actions → New repository secret</div>
             document.body.classList.add('dark-mode');
         }
 
+        // Expand/Collapse Workflows
+        function toggleWorkflow(header) {
+            const section = header.parentElement;
+            section.classList.toggle('expanded');
+        }
+
+        // Expand All
+        function expandAll() {
+            document.querySelectorAll('.workflow-section').forEach(section => {
+                section.classList.add('expanded');
+            });
+        }
+
         // Sidebar Toggle
         function toggleSidebar() {
-            document.querySelector('.sidebar').style.display = 
-                document.querySelector('.sidebar').style.display === 'none' ? 'block' : 'none';
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('mobile-open');
         }
 
-        // Smooth scrolling
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Tab Switching
+        function switchTab(event, tabName) {
+            event.preventDefault();
+            
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from buttons
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Copy Code
+        function copyCode(button) {
+            const code = button.nextElementSibling.textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                button.textContent = '✅ Copied!';
+                button.classList.add('copied');
+                setTimeout(() => {
+                    button.textContent = 'Copy';
+                    button.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        // Toggle Checkbox
+        function toggleCheckbox(item) {
+            const checkbox = item.querySelector('input[type="checkbox"]');
+            checkbox.checked = !checkbox.checked;
+            item.classList.toggle('completed');
+        }
+
+        // Scroll to Section
+        function scrollTo(id) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+                document.getElementById('sidebar').classList.remove('mobile-open');
+            }
+        }
+
+        // Active Link Highlighting
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('section');
+            const links = document.querySelectorAll('.sidebar a');
+            
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
                 }
             });
-        });
-
-        // Copy code blocks
-        document.querySelectorAll('.code-block').forEach(block => {
-            block.addEventListener('click', () => {
-                const text = block.textContent;
-                navigator.clipboard.writeText(text).then(() => {
-                    const originalText = block.textContent;
-                    block.textContent = '✅ Copied!';
-                    setTimeout(() => {
-                        block.textContent = originalText;
-                    }, 2000);
-                });
-            });
-        });
-
-        // Expandable sections
-        function toggleExpandable(header) {
-            const content = header.nextElementSibling;
-            const icon = header.querySelector('.expand-icon');
-            content.classList.toggle('active');
-            icon.classList.toggle('active');
-        }
-
-        // Checklist
-        function toggleCheckbox(item) {
-            item.classList.toggle('checked');
-        }
-
-        // Tabs
-        function switchTab(evt, tabName) {
-            const contents = document.querySelectorAll('.tab-content');
-            contents.forEach(content => content.classList.remove('active'));
             
-            const buttons = document.querySelectorAll('.tab-button');
-            buttons.forEach(button => button.classList.remove('active'));
-            
-            document.getElementById(tabName).classList.add('active');
-            evt.currentTarget.classList.add('active');
-        }
-
-        // Highlight current section in sidebar
-        window.addEventListener('scroll', () => {
-            const sections = document.querySelectorAll('.section');
-            const sidebarLinks = document.querySelectorAll('.sidebar a');
-
-            sections.forEach(section => {
-                const rect = section.getBoundingClientRect();
-                if (rect.top <= 100 && rect.bottom >= 100) {
-                    sidebarLinks.forEach(link => link.style.color = '#666');
-                    const activeLink = document.querySelector(`.sidebar a[href="#${section.id}"]`);
-                    if (activeLink) {
-                        activeLink.style.color = 'var(--primary)';
-                        activeLink.style.fontWeight = '600';
-                    }
+            links.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
                 }
             });
         });
